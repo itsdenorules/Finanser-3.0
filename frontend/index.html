@@ -103,6 +103,42 @@
     </style>
 </head>
 <body class="min-h-screen flex flex-col md:flex-row">
+
+    <!-- GİRİŞ / KAYIT MODALI (Oturum Yoksa Açılır) -->
+    <div id="authOverlay" class="fixed inset-0 bg-[#2B3326]/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="card-soft max-w-md w-full shadow-2xl">
+            <h2 class="text-2xl font-bold text-[#2B3326] serif-title text-center m-0">Finanser</h2>
+            <p class="text-xs text-[#6E6A63] text-center mt-1 mb-6">Hesabınıza giriş yapın veya yeni hesap oluşturun</p>
+            
+            <div class="flex border-b border-[#DFD8CE] mb-4">
+                <button id="authTabLogin" onclick="setAuthMode('login')" class="flex-1 py-2 text-xs font-bold border-b-2 border-[#2B3326] text-[#2B3326]">Giriş Yap</button>
+                <button id="authTabRegister" onclick="setAuthMode('register')" class="flex-1 py-2 text-xs font-semibold text-[#6E6A63]">Kayıt Ol</button>
+            </div>
+
+            <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-3">
+                <div id="authNameField" class="hidden">
+                    <label class="block text-xs font-semibold text-[#6E6A63] mb-1">Ad Soyad</label>
+                    <input type="text" id="authName" class="custom-input" placeholder="Adınız Soyadınız">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-[#6E6A63] mb-1">E-posta</label>
+                    <input type="email" id="authEmail" required class="custom-input" placeholder="ornek@posta.com">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-[#6E6A63] mb-1">Şifre</label>
+                    <input type="password" id="authPassword" required class="custom-input" placeholder="••••••••">
+                </div>
+                <div id="authRefField" class="hidden">
+                    <label class="block text-xs font-semibold text-[#6E6A63] mb-1">Referans Kodu (İsteğe Bağlı)</label>
+                    <input type="text" id="authRef" class="custom-input" placeholder="Örn: Finans101">
+                </div>
+                <div class="pt-2">
+                    <button type="submit" id="authSubmitBtn" class="btn-primary w-full">Giriş Yap</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- SOL KENAR ÇUBUĞU (SIDEBAR) -->
     <aside class="w-full md:w-64 bg-[#F6F3EE] border-r border-[#DFD8CE] p-6 flex flex-col justify-between shrink-0">
         <div>
@@ -111,15 +147,17 @@
                 <h1 class="text-3xl font-bold text-[#2B3326] serif-title m-0">Finanser</h1>
                 <p class="text-xs text-[#6E6A63] tracking-wide mt-1 uppercase">Ön Muhasebe & Finans</p>
             </div>
+
             <!-- Kullanıcı Özet Kartı -->
             <div id="userCard" class="bg-[#EAE4DC] border border-[#DFD8CE] rounded-xl p-3.5 mb-6">
-                <p id="userNameDisplay" class="font-semibold text-sm text-[#2B3326] truncate">Yükleniyor...</p>
-                <p id="userEmailDisplay" class="text-xs text-[#6E6A63] truncate">...</p>
+                <p id="userNameDisplay" class="font-semibold text-sm text-[#2B3326] truncate">Kullanıcı</p>
+                <p id="userEmailDisplay" class="text-xs text-[#6E6A63] truncate">-</p>
                 <div class="mt-2.5 pt-2.5 border-t border-[#DFD8CE] flex justify-between items-center text-xs">
                     <span id="userPackageBadge" class="font-semibold text-[#2B3326]">Ücretsiz</span>
                     <span id="userQuotaText" class="text-[#6E6A63]">0 / 5 Hak</span>
                 </div>
             </div>
+
             <!-- Menü Öğeleri -->
             <nav class="space-y-1.5" id="navContainer">
                 <button class="nav-link w-full text-left active" onclick="switchTab('dashboard')">
@@ -137,26 +175,27 @@
                 <button class="nav-link w-full text-left" onclick="switchTab('paketYukselt')">
                     Paket Yükselt
                 </button>
-                <a id="adminNavBtn" href="admin.html" class="nav-link w-full text-left hidden">
-                    Yönetim Paneli →
-                </a>
             </nav>
         </div>
+
         <!-- Alt Kısım / Çıkış -->
         <div class="pt-6 border-t border-[#DFD8CE] mt-6">
             <button onclick="handleLogout()" class="w-full text-center py-2.5 px-4 text-xs font-semibold text-[#6E6A63] hover:text-[#2B3326] border border-[#DFD8CE] rounded-xl hover:bg-[#EAE4DC] transition">
-                Oturumu Kapat
+                Çıkış Yap
             </button>
         </div>
     </aside>
+
     <!-- ANA İÇERİK ALANI -->
     <main class="flex-1 p-6 md:p-10 max-w-6xl mx-auto w-full">
+
         <!-- 1. GENEL BAKIŞ (DASHBOARD) -->
         <section id="tab-dashboard" class="space-y-6">
             <div class="card-soft">
                 <h2 id="greetingTitle" class="text-3xl font-bold text-[#2B3326] serif-title m-0">Hoş Geldiniz</h2>
                 <p class="text-[#6E6A63] text-sm mt-1 mb-0">Finansal durumunuzun genel görünümü ve son hareketleriniz.</p>
             </div>
+
             <!-- İstatistik Kartları -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="card-soft">
@@ -176,6 +215,7 @@
                     <p id="statQuota" class="text-2xl font-bold text-[#2B3326] m-0">0 / 5</p>
                 </div>
             </div>
+
             <!-- Son Hareketler -->
             <div class="card-soft">
                 <div class="flex justify-between items-center mb-4">
@@ -187,14 +227,16 @@
                 </div>
             </div>
         </section>
-        <!-- 2. BELGE YÜKLE (İSTEDİĞİN AI BÖLÜMÜ) -->
+
+        <!-- 2. BELGE YÜKLE (AI BÖLÜMÜ) -->
         <section id="tab-belgeYukle" class="space-y-6 hidden">
             <!-- Üst Bilgi Kartı -->
             <div class="card-soft">
                 <h3 style="color:#2B3326;margin:0 0 4px 0;font-weight:700;font-size:24px;">Belge Yükle</h3>
                 <p style="color:#6E6A63;font-size:13px;margin:0;">Fatura, fiş, dekont veya ekstre yükleyerek yapay zekâ ile otomatik okutun.</p>
             </div>
-            <!-- Kota Doldu Uyarısı (Şartlı Gösterim) -->
+
+            <!-- Kota Doldu Uyarısı -->
             <div id="quotaExceededBox" class="card-olive hidden">
                 <h3 style="color:#F6F3EE !important;margin:0 0 8px 0;font-weight:700;">Belge Kotanız Doldu</h3>
                 <p id="quotaExceededMsg" style="color:#DFD8CE;margin:0;font-size:14px;">Mevcut paketiniz: Ücretsiz — 5/5 belge kullanıldı.</p>
@@ -203,12 +245,14 @@
                     <button onclick="switchTab('paketYukselt')" class="btn-primary" style="background:#F6F3EE;color:#2B3326;border-color:#F6F3EE;">Paket Yükselt</button>
                 </div>
             </div>
-            <!-- Yükleme Alanı (Kota varsa görünür) -->
+
+            <!-- Yükleme Alanı -->
             <div id="uploadMainContainer" class="space-y-6">
                 <!-- Kalan Belge Bilgisi -->
                 <p id="remainingQuotaText" style="color:#6E6A63;font-size:13px;margin-bottom:12px;">
                     Kalan belge hakkı: <strong>5 / 5</strong>
                 </p>
+
                 <!-- Dosya Seçici -->
                 <div class="card-soft border-2 border-dashed border-[#DFD8CE] text-center p-8 bg-[#FAF8F5]">
                     <input type="file" id="fileInput" accept="image/jpeg,image/png,image/jpg,application/pdf" class="hidden" onchange="handleFileSelected(event)">
@@ -217,6 +261,7 @@
                         <p class="text-sm font-semibold text-[#2B3326] mb-1">Belge seçin (JPG, PNG veya PDF)</p>
                         <p class="text-xs text-[#6E6A63]">Tıklayın veya dosyayı bu alana sürükleyip bırakın</p>
                     </div>
+
                     <!-- Önizleme -->
                     <div id="previewArea" class="hidden mt-4 pt-4 border-t border-[#DFD8CE]">
                         <img id="imagePreview" src="" alt="Yüklenen belge" class="max-h-72 mx-auto rounded-xl border border-[#DFD8CE] shadow-sm mb-4 hidden">
@@ -231,16 +276,19 @@
                         </div>
                     </div>
                 </div>
+
                 <!-- Yükleniyor Göstergesi -->
                 <div id="loadingBox" class="card-soft text-center py-8 hidden">
                     <div class="inline-block animate-spin text-2xl text-[#2B3326] mb-2">↻</div>
                     <p class="text-sm font-semibold text-[#2B3326] m-0">Belge yapay zekâ ile okunuyor...</p>
                     <p class="text-xs text-[#6E6A63] mt-1">Lütfen birkaç saniye bekleyiniz.</p>
                 </div>
-                <!-- Okunan Veriler Kartı ve Düzenleme Formu -->
+
+                <!-- Okunan Veriler Kartı ve Formu -->
                 <div id="aiResultCard" class="card-soft hidden">
                     <h3 style="color:#2B3326;margin:0 0 4px 0;font-weight:700;font-size:22px;">Okunan Veriler</h3>
                     <p style="color:#6E6A63;font-size:13px;margin:0 0 16px 0;">Aşağıdaki bilgileri kontrol edip gerekirse düzenleyiniz.</p>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-semibold text-[#6E6A63] mb-1">Tarih</label>
@@ -278,6 +326,7 @@
                             <input type="text" id="ai_aciklama" class="custom-input">
                         </div>
                     </div>
+
                     <div class="flex gap-3 mt-6">
                         <button onclick="saveAiTransaction()" class="btn-primary">
                             Onayla ve Kaydet
@@ -289,12 +338,14 @@
                 </div>
             </div>
         </section>
+
         <!-- 3. MANUEL GİRİŞ -->
         <section id="tab-manuelGiris" class="space-y-6 hidden">
             <div class="card-soft">
                 <h3 class="text-2xl font-bold text-[#2B3326] serif-title m-0">Manuel Veri Girişi</h3>
                 <p class="text-xs text-[#6E6A63] mt-1 mb-0">Gelir veya gider hareketlerinizi form üzerinden elle ekleyiniz.</p>
             </div>
+
             <div class="card-soft">
                 <form id="manualForm" onsubmit="handleManualSubmit(event)" class="space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -336,6 +387,7 @@
                 </form>
             </div>
         </section>
+
         <!-- 4. İŞLEMLERİM & EXCEL İNDİRME -->
         <section id="tab-islemler" class="space-y-6 hidden">
             <div class="card-soft flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -347,6 +399,7 @@
                     Excel Olarak İndir (.xlsx)
                 </button>
             </div>
+
             <div class="card-soft overflow-x-auto p-0">
                 <table class="w-full text-left text-sm">
                     <thead class="bg-[#EAE4DC] border-b border-[#DFD8CE] text-xs font-semibold text-[#6E6A63]">
@@ -360,18 +413,19 @@
                         </tr>
                     </thead>
                     <tbody id="allTransactionsTable" class="divide-y divide-[#DFD8CE]">
-                        <!-- İşlemler JS ile listelenir -->
+                        <!-- İşlemler JS ile doldurulur -->
                     </tbody>
                 </table>
             </div>
         </section>
-        <!-- 5. PAKET YÜKSELT (PAYTR ALANI) -->
+
+        <!-- 5. PAKET YÜKSELT -->
         <section id="tab-paketYukselt" class="space-y-6 hidden">
             <div class="card-soft">
                 <h3 class="text-2xl font-bold text-[#2B3326] serif-title m-0">Paket Yükselt</h3>
                 <p class="text-xs text-[#6E6A63] mt-1 mb-0">İhtiyacınıza uygun paketi seçerek yapay zekâ belge kotanızı artırın.</p>
             </div>
-            <!-- Fiyatlandırma Kartları -->
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Aylık Premium -->
                 <div class="card-soft flex flex-col justify-between border border-[#DFD8CE]">
@@ -393,6 +447,7 @@
                         Satın Al ve Yükselt
                     </button>
                 </div>
+
                 <!-- Yıllık Premium -->
                 <div class="card-olive flex flex-col justify-between border border-[#2B3326] relative">
                     <div class="absolute top-3 right-3 bg-[#DFD8CE] text-[#2B3326] text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
@@ -418,84 +473,128 @@
                 </div>
             </div>
         </section>
+
     </main>
-    <!-- JAVASCRIPT: UYGULAMA ÇEKİRDEK MANTIĞI -->
+
+    <!-- JAVASCRIPT ÇEKİRDEK MANTIĞI -->
     <script>
-        // --- 1. SABİTLER & AYARLAR ---
         const PAYTR_AYLIK_LINK = "";   // TODO: BURAYA PAYTR AYLIK ODEME LINKI EKLENECEK
         const PAYTR_YILLIK_LINK = "";  // TODO: BURAYA PAYTR YILLIK ODEME LINKI EKLENECEK
-        const ADMIN_EMAIL = "denizzdinc@icloud.com";
+
         const GELIR_KATEGORILERI = ["Satış", "Hizmet Geliri", "Kira Geliri", "Faiz / Yatırım", "Komisyon", "Diğer Gelir"];
         const GIDER_KATEGORILERI = ["Kira", "Fatura / Aidat", "Personel", "Malzeme / Hammadde", "Ulaşım", "Yemek", "Ofis", "Pazarlama / Reklam", "Vergi / Harç", "Sigorta", "Diğer Gider"];
-        // --- 2. DURUM YÖNETİMİ (STATE) ---
+
         let currentUser = null;
         let transactions = [];
         let selectedFile = null;
-        // Sayfa Yüklendiğinde
+        let currentAuthMode = "login";
+
         window.addEventListener("DOMContentLoaded", () => {
-            initUserSession();
+            initSession();
             loadTransactions();
             renderDashboard();
             updateManualCategories();
             document.getElementById("m_tarih").value = new Date().toISOString().split("T")[0];
         });
-        // Kullanıcı Oturumu (Local / URL / API Senkronu)
-        function initUserSession() {
+
+        // Kullanıcı Oturum Yönetimi
+        function initSession() {
             const saved = localStorage.getItem("finanser_user");
             if (saved) {
                 currentUser = JSON.parse(saved);
+                document.getElementById("authOverlay").classList.add("hidden");
+                updateUserInterface();
             } else {
-                currentUser = {
-                    id: 1,
-                    ad: "Deniz Dinç",
-                    email: "denizzdinc@icloud.com",
-                    rol: "admin",
-                    paket: "Ücretsiz",
-                    kota: 5,
-                    kullanilan_belge: 0
-                };
-                localStorage.setItem("finanser_user", JSON.stringify(currentUser));
+                // Oturum yoksa Auth modalını aç
+                document.getElementById("authOverlay").classList.remove("hidden");
             }
-            // Arayüzü Kullanıcıya Göre Güncelle
-            document.getElementById("userNameDisplay").textContent = currentUser.ad || "Kullanıcı";
+        }
+
+        function updateUserInterface() {
+            if (!currentUser) return;
+            document.getElementById("userNameDisplay").textContent = currentUser.ad || currentUser.email.split("@")[0];
             document.getElementById("userEmailDisplay").textContent = currentUser.email || "";
-            document.getElementById("userPackageBadge").textContent = currentUser.paket;
-            document.getElementById("userQuotaText").textContent = `${currentUser.kullanilan_belge} / ${currentUser.kota} Hak`;
-            // Admin Butonunu Göster/Gizle
-            if (currentUser.email === ADMIN_EMAIL || currentUser.rol === "admin") {
-                document.getElementById("adminNavBtn").classList.remove("hidden");
-            }
-            // Dinamik Karşılama
+            document.getElementById("userPackageBadge").textContent = currentUser.paket || "Ücretsiz";
+            document.getElementById("userQuotaText").textContent = `${currentUser.kullanilan_belge || 0} / ${currentUser.kota || 5} Hak`;
+
             const hour = new Date().getHours();
             let greeting = "İyi akşamlar";
             if (hour >= 6 && hour < 12) greeting = "Günaydın";
             else if (hour >= 12 && hour < 18) greeting = "Merhaba";
-            document.getElementById("greetingTitle").textContent = `${greeting}, ${currentUser.ad || ""}`;
+            document.getElementById("greetingTitle").textContent = `${greeting}, ${currentUser.ad || currentUser.email.split("@")[0]}`;
+
             checkQuotaStatus();
         }
-        // Kota Durumunu Denetle
+
+        // Auth Formu
+        function setAuthMode(mode) {
+            currentAuthMode = mode;
+            const isReg = mode === "register";
+            document.getElementById("authNameField").classList.toggle("hidden", !isReg);
+            document.getElementById("authRefField").classList.toggle("hidden", !isReg);
+            document.getElementById("authSubmitBtn").textContent = isReg ? "Kayıt Ol" : "Giriş Yap";
+
+            document.getElementById("authTabLogin").className = isReg ? "flex-1 py-2 text-xs font-semibold text-[#6E6A63]" : "flex-1 py-2 text-xs font-bold border-b-2 border-[#2B3326] text-[#2B3326]";
+            document.getElementById("authTabRegister").className = isReg ? "flex-1 py-2 text-xs font-bold border-b-2 border-[#2B3326] text-[#2B3326]" : "flex-1 py-2 text-xs font-semibold text-[#6E6A63]";
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById("authEmail").value.trim();
+            const ad = document.getElementById("authName").value.trim() || email.split("@")[0];
+            const ref = document.getElementById("authRef").value.trim();
+
+            currentUser = {
+                id: Date.now(),
+                ad: ad,
+                email: email,
+                paket: "Ücretsiz",
+                kota: 5,
+                kullanilan_belge: 0,
+                referans: ref
+            };
+
+            localStorage.setItem("finanser_user", JSON.stringify(currentUser));
+            document.getElementById("authOverlay").classList.add("hidden");
+            updateUserInterface();
+            renderDashboard();
+        }
+
+        function handleLogout() {
+            localStorage.removeItem("finanser_user");
+            location.reload();
+        }
+
+        // Kota Denetimi
         function checkQuotaStatus() {
-            const isFull = currentUser.kullanilan_belge >= currentUser.kota;
-            const remaining = Math.max(0, currentUser.kota - currentUser.kullanilan_belge);
-            document.getElementById("remainingQuotaText").innerHTML = `Kalan belge hakkı: <strong>${remaining} / ${currentUser.kota}</strong>`;
+            if (!currentUser) return;
+            const kota = currentUser.kota || 5;
+            const kullanilan = currentUser.kullanilan_belge || 0;
+            const isFull = kullanilan >= kota;
+            const remaining = Math.max(0, kota - kullanilan);
+
+            document.getElementById("remainingQuotaText").innerHTML = `Kalan belge hakkı: <strong>${remaining} / ${kota}</strong>`;
+
             if (isFull) {
                 document.getElementById("quotaExceededBox").classList.remove("hidden");
                 document.getElementById("uploadPrompt").classList.add("pointer-events-none", "opacity-50");
-                document.getElementById("quotaExceededMsg").textContent = `Mevcut paketiniz: ${currentUser.paket} — ${currentUser.kullanilan_belge}/${currentUser.kota} belge kullanıldı.`;
+                document.getElementById("quotaExceededMsg").textContent = `Mevcut paketiniz: ${currentUser.paket || 'Ücretsiz'} — ${kullanilan}/${kota} belge kullanıldı.`;
             } else {
                 document.getElementById("quotaExceededBox").classList.add("hidden");
                 document.getElementById("uploadPrompt").classList.remove("pointer-events-none", "opacity-50");
             }
         }
-        // Sekmeler Arası Geçiş
+
         function switchTab(tabId) {
             const tabs = ["dashboard", "belgeYukle", "manuelGiris", "islemler", "paketYukselt"];
             tabs.forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
                 if (el) el.classList.add("hidden");
             });
+
             const activeTab = document.getElementById(`tab-${tabId}`);
             if (activeTab) activeTab.classList.remove("hidden");
+
             const buttons = document.querySelectorAll("#navContainer .nav-link");
             buttons.forEach(btn => {
                 if (btn.getAttribute("onclick") && btn.getAttribute("onclick").includes(tabId)) {
@@ -504,16 +603,20 @@
                     btn.classList.remove("active");
                 }
             });
+
             if (tabId === "belgeYukle") checkQuotaStatus();
             if (tabId === "islemler") renderAllTransactions();
         }
-        // --- 3. BELGE YÜKLE & AI ANALİZ (İSTEDİĞİN ÖZEL MANTIK) ---
+
+        // Belge Seçimi & Önizleme
         function handleFileSelected(event) {
             const file = event.target.files[0];
             if (!file) return;
             selectedFile = file;
+
             document.getElementById("uploadPrompt").classList.add("hidden");
             document.getElementById("previewArea").classList.remove("hidden");
+
             if (file.type.startsWith("image/")) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -526,10 +629,11 @@
             } else {
                 document.getElementById("imagePreview").classList.add("hidden");
                 const pdfName = document.getElementById("pdfPreviewName");
-                pdfName.textContent = `Yüklenen PDF: ${file.name}`;
+                pdfName.textContent = `Yüklenen Belge: ${file.name}`;
                 pdfName.classList.remove("hidden");
             }
         }
+
         function clearSelectedFile() {
             selectedFile = null;
             document.getElementById("fileInput").value = "";
@@ -537,58 +641,61 @@
             document.getElementById("previewArea").classList.add("hidden");
             document.getElementById("aiResultCard").classList.add("hidden");
         }
+
+        // AI Belge Okuma
         async function processDocument() {
             if (!selectedFile) return;
-            // Kota kontrolü
-            if (currentUser.kullanilan_belge >= currentUser.kota) {
+
+            if (currentUser && currentUser.kullanilan_belge >= currentUser.kota) {
                 alert("Belge kotanız dolmuştur. Lütfen paketinizi yükseltin.");
                 switchTab("paketYukselt");
                 return;
             }
+
             document.getElementById("previewArea").classList.add("hidden");
             document.getElementById("loadingBox").classList.remove("hidden");
+
             const formData = new FormData();
             formData.append("file", selectedFile);
+
             try {
-                // Backend'deki ai_service veya main.py API endpoint'ine istek
                 const res = await fetch("/api/process-document", {
                     method: "POST",
                     body: formData
                 });
+
                 if (res.ok) {
                     const data = await res.json();
                     fillAiForm(data);
                 } else {
-                    // Endpoint henüz bağlı değilse güvenli fallback simülasyonu
-                    const fallbackData = {
+                    // Backend bağlantısı henüz hazır değilse varsayılan okuma örneği
+                    fillAiForm({
                         tarih: new Date().toLocaleDateString("tr-TR"),
-                        firma: selectedFile.name.split(".")[0] || "Örnek Ticaret A.Ş.",
+                        firma: selectedFile.name.split(".")[0],
                         islem_tipi: "Gider",
                         kategori: "Fatura / Aidat",
-                        tutar: 1450.00,
-                        kdv: 290.00,
+                        tutar: 0.00,
+                        kdv: 0.00,
                         belge_turu: selectedFile.type.includes("pdf") ? "Banka Dekontu" : "Fatura",
-                        aciklama: "AI tarafından otomatik okundu"
-                    };
-                    fillAiForm(fallbackData);
+                        aciklama: ""
+                    });
                 }
             } catch (err) {
-                // Ağ / sunucu hatasında kullanıcıyı yarı yolda bırakmama
-                const fallbackData = {
+                fillAiForm({
                     tarih: new Date().toLocaleDateString("tr-TR"),
-                    firma: "Örnek Tedarikçi",
+                    firma: selectedFile.name.split(".")[0],
                     islem_tipi: "Gider",
-                    kategori: "Malzeme / Hammadde",
-                    tutar: 850.00,
-                    kdv: 170.00,
-                    belge_turu: "Fiş",
-                    aciklama: "Otomatik okuma tamamlandı"
-                };
-                fillAiForm(fallbackData);
+                    kategori: "Genel",
+                    tutar: 0.00,
+                    kdv: 0.00,
+                    belge_turu: "Belge",
+                    aciklama: ""
+                });
             } finally {
                 document.getElementById("loadingBox").classList.add("hidden");
             }
         }
+
         function fillAiForm(data) {
             document.getElementById("ai_tarih").value = data.tarih || "";
             document.getElementById("ai_firma").value = data.firma || "";
@@ -598,8 +705,10 @@
             document.getElementById("ai_kdv").value = parseFloat(data.kdv || 0).toFixed(2);
             document.getElementById("ai_belge").value = data.belge_turu || "Belge";
             document.getElementById("ai_aciklama").value = data.aciklama || "";
+
             document.getElementById("aiResultCard").classList.remove("hidden");
         }
+
         function saveAiTransaction() {
             const txn = {
                 id: Date.now(),
@@ -613,21 +722,26 @@
                 aciklama: document.getElementById("ai_aciklama").value,
                 kaynak: "Yapay Zekâ"
             };
+
             transactions.unshift(txn);
             saveTransactions();
-            // Kullanıcının kullanılan belge sayısını 1 artır
-            currentUser.kullanilan_belge += 1;
-            localStorage.setItem("finanser_user", JSON.stringify(currentUser));
-            initUserSession();
+
+            if (currentUser) {
+                currentUser.kullanilan_belge = (currentUser.kullanilan_belge || 0) + 1;
+                localStorage.setItem("finanser_user", JSON.stringify(currentUser));
+                updateUserInterface();
+            }
+
             clearSelectedFile();
             renderDashboard();
-            alert("İşlem başarıyla kaydedildi.");
             switchTab("islemler");
         }
+
         function cancelAiResult() {
             clearSelectedFile();
         }
-        // --- 4. MANUEL GİRİŞ MANTIĞI ---
+
+        // Manuel Form
         function updateManualCategories() {
             const tip = document.getElementById("m_tip").value;
             const select = document.getElementById("m_kategori");
@@ -640,6 +754,7 @@
                 select.appendChild(opt);
             });
         }
+
         function handleManualSubmit(e) {
             e.preventDefault();
             const txn = {
@@ -654,47 +769,50 @@
                 belge_turu: "Manuel",
                 kaynak: "Manuel"
             };
+
             transactions.unshift(txn);
             saveTransactions();
             renderDashboard();
             e.target.reset();
             document.getElementById("m_tarih").value = new Date().toISOString().split("T")[0];
-            alert("İşlem başarıyla eklendi.");
             switchTab("islemler");
         }
-        // --- 5. İŞLEMLER VE DASHBOARD RENDER ---
+
         function loadTransactions() {
             const saved = localStorage.getItem("finanser_transactions");
-            if (saved) {
-                transactions = JSON.parse(saved);
-            } else {
-                transactions = [];
-            }
+            transactions = saved ? JSON.parse(saved) : [];
         }
+
         function saveTransactions() {
             localStorage.setItem("finanser_transactions", JSON.stringify(transactions));
         }
+
         function formatTL(num) {
             return (parseFloat(num) || 0).toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " TL";
         }
+
         function renderDashboard() {
             let gelir = 0;
             let gider = 0;
+
             transactions.forEach(t => {
                 if (t.islem_tipi === "Gelir") gelir += t.tutar;
                 else gider += t.tutar;
             });
-            const bakiye = gelir - gider;
+
             document.getElementById("statGelir").textContent = formatTL(gelir);
             document.getElementById("statGider").textContent = formatTL(gider);
-            document.getElementById("statBakiye").textContent = formatTL(bakiye);
-            document.getElementById("statQuota").textContent = `${currentUser.kullanilan_belge} / ${currentUser.kota}`;
-            // Son 5 işlem
+            document.getElementById("statBakiye").textContent = formatTL(gelir - gider);
+            if (currentUser) {
+                document.getElementById("statQuota").textContent = `${currentUser.kullanilan_belge || 0} / ${currentUser.kota || 5}`;
+            }
+
             const list = document.getElementById("recentTransactionsList");
             if (transactions.length === 0) {
                 list.innerHTML = `<p class="text-[#6E6A63] text-xs py-4 text-center">Henüz işlem kaydı bulunmuyor.</p>`;
                 return;
             }
+
             list.innerHTML = transactions.slice(0, 5).map(t => `
                 <div class="flex justify-between items-center p-3 bg-[#EAE4DC] rounded-xl border border-[#DFD8CE]">
                     <div>
@@ -707,12 +825,14 @@
                 </div>
             `).join("");
         }
+
         function renderAllTransactions() {
             const tbody = document.getElementById("allTransactionsTable");
             if (transactions.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-xs text-[#6E6A63]">Kayıtlı işlem bulunmamaktadır.</td></tr>`;
                 return;
             }
+
             tbody.innerHTML = transactions.map(t => `
                 <tr class="hover:bg-[#F6F3EE] transition">
                     <td class="p-3.5 text-xs text-[#6E6A63]">${t.tarih}</td>
@@ -730,12 +850,14 @@
                 </tr>
             `).join("");
         }
-        // --- 6. EXCEL (.XLSX) İNDİRME ---
+
+        // Excel Dökümü
         function exportToExcel() {
             if (transactions.length === 0) {
                 alert("İndirilecek işlem verisi bulunamadı.");
                 return;
             }
+
             const exportData = transactions.map(t => ({
                 "Tarih": t.tarih,
                 "İşlem Tipi": t.islem_tipi,
@@ -747,12 +869,13 @@
                 "Belge Türü": t.belge_turu || "",
                 "Kaynak": t.kaynak || ""
             }));
+
             const ws = XLSX.utils.json_to_sheet(exportData);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "İşlemler");
             XLSX.writeFile(wb, `Finanser_Islemler_${new Date().toISOString().slice(0, 10)}.xlsx`);
         }
-        // --- 7. PAYTR & ÇIKIŞ ---
+
         function handlePaytrCheckout(tip) {
             const link = tip === "aylik" ? PAYTR_AYLIK_LINK : PAYTR_YILLIK_LINK;
             if (link) {
@@ -760,10 +883,6 @@
             } else {
                 alert("Ödeme altyapısı hazırlanıyor. Lütfen daha sonra tekrar deneyiniz.");
             }
-        }
-        function handleLogout() {
-            localStorage.removeItem("finanser_user");
-            location.reload();
         }
     </script>
 </body>
