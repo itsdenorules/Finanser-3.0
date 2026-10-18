@@ -1,113 +1,137 @@
-from fastapi import FastAPI, UploadFile, File, Header, HTTPException, Depends
+from fastapi import FastAPI, Depends, HTTPException, status, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
+from database import get_db, User, Transaction
+from ai_service import process_receipt_image
+from passlib.context import CryptContext
+from jose import jwt, JWTError
+import io
+import os
+from PIL import Image
 from pydantic import BaseModel
-import database as db
-import ai_service as ai
-from typing import Optional
+from typing import List
+import json
+
+# Üretim için Şifreleme ve Token Ayarları
+SECRET_KEY = os.environ.get("SECRET_KEY", "bunu_vercel_de_degistir_cok_gizli_anahtar")
+ALGORITHM = "HS256"
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 app = FastAPI(title="Finanser API")
 
-# Ön yüzün (HTML/JS) bu API'ye sorunsuzca bağlanabilmesi için CORS ayarları (Güvenlik Duvarı İzni)
+# Üretim ortamı için CORS (Vercel domainini buraya ekleyeceğiz)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Canlıya alırken buraya kendi domainini (ör: finanser.com) yazacağız
+    allow_origins=["*"], # Üretime çıkarken burayı "https://finanser-six.vercel.app" yapacağız
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# --- Güvenlik: Token Kontrolü (Giriş Yapmış Mı?) ---
-def get_current_user(authorization: Optional[str] = Header(None)):
-    if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Yetkisiz erisim. Lutfen giris yapin.")
-    token = authorization.split(" ")[1]
-    user = db.get_user_by_token(token)
-    if not user:
-        raise HTTPException(status_code=401, detail="Gecersiz veya suresi dolmus oturum.")
+# --- ŞİFRELEME VE GÜVENLİK FONKSİYONLARI ---
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
+def create_access_token(data: dict):
+    to_encode = data.copy()
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+# Her işlemde kullanıcının kim olduğunu anlayan (Token çözen) fonksiyon
+async def get_current_user(token: str, db: Session = Depends(get_db)):
+    credentials_exception = HTTPException(status_code=401, detail="Geçersiz kimlik")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None: raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    
+    user = db.query(User).filter(User.email == email).first()
+    if user is None: raise credentials_exception
     return user
 
-# --- Veri Modelleri ---
-class LoginRequest(BaseModel):
+# --- Pydantic Modelleri (Frontend'den gelen veriyi kontrol etmek için) ---
+class UserCreate(BaseModel):
+    full_name: str
     email: str
-    sifre: str
+    password: str
+    referral_code: str = None
 
-class RegisterRequest(BaseModel):
-    ad: str
+class UserLogin(BaseModel):
     email: str
-    sifre: str
-    ref_kodu: Optional[str] = ""
+    password: str
 
-class ManualTransaction(BaseModel):
-    tarih: str
-    islem_tipi: str
-    kategori: str
-    firma: str
-    tutar: float
-    kdv: float
-    aciklama: str
+class TransactionCreate(BaseModel):
+    date: str
+    amount: float
+    tax: float
+    company: str
+    type: str
+    category: str
+    description: str = ""
 
-# --- SİSTEM BAŞLANGICI ---
-@app.on_event("startup")
-def startup_db():
-    db.init_db() # Sunucu başlarken veritabanı tabloları yoksa otomatik kur
-
-# --- UÇ NOKTALAR (ENDPOINTS - Sitenin Bağlanacağı Adresler) ---
-
+# --- 1. KAYIT OLMA (REGISTER) ---
 @app.post("/api/auth/register")
-def register(req: RegisterRequest):
-    res = db.register_user(req.ad, req.email, req.sifre, req.ref_kodu)
-    if not res["ok"]:
-        raise HTTPException(status_code=400, detail=res["err"])
-    return {"token": res["token"]}
+def register(user: UserCreate, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.email == user.email).first()
+    if db_user:
+        raise HTTPException(status_code=400, detail="Bu email zaten kayıtlı")
+    
+    hashed_password = get_password_hash(user.password)
+    new_user = User(full_name=user.full_name, email=user.email, hashed_password=hashed_password, referral_code=user.referral_code)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return {"message": "Kayıt başarılı"}
 
+# --- 2. GİRİŞ YAPMA (LOGIN) - Token Verir, Çıkış Yapılmaz ---
 @app.post("/api/auth/login")
-def login(req: LoginRequest):
-    res = db.login_user(req.email, req.sifre)
-    if not res["ok"]:
-        raise HTTPException(status_code=400, detail=res["err"])
-    return {"token": res["token"]}
+def login(user: UserLogin, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.email == user.email).first()
+    if not db_user or not verify_password(user.password, db_user.hashed_password):
+        raise HTTPException(status_code=401, detail="Hatalı email veya şifre")
+    
+    access_token = create_access_token(data={"sub": db_user.email})
+    return {"access_token": access_token, "token_type": "bearer", "user_name": db_user.full_name}
 
-@app.get("/api/user/me")
-def get_me(user: dict = Depends(get_current_user)):
-    user.pop("sifre_hash", None) # Güvenlik için şifreyi gizle
-    stats = db.get_user_stats(user["id"])
-    return {"user": user, "stats": stats}
+# --- 3. YAPAY ZEKA İLE FATURA OKUMA ---
+@app.post("/api/analyze-receipt")
+async def analyze_receipt(file: UploadFile = File(...)):
+    if not file: raise HTTPException(status_code=400, detail="Dosya yok")
+    try:
+        content = await file.read()
+        image = Image.open(io.BytesIO(content))
+        result_text = await process_receipt_image(image)
+        # Gelen metni gerçek JSON nesnesine çeviriyoruz ki frontend kolay okusun
+        return {"status": "success", "data": json.loads(result_text)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/api/transactions/manual")
-def add_manual(tx: ManualTransaction, user: dict = Depends(get_current_user)):
-    # KOTA KONTROLÜ: Limit dolduysa işlemi reddet!
-    if user["kullanilan_belge"] >= user["kota"]:
-        raise HTTPException(status_code=403, detail="Kotaniz doldu. Lutfen paket yukseltin.")
-    
-    db.add_transaction(
-        user["id"], tx.tarih, tx.islem_tipi, tx.kategori, tx.firma,
-        tx.tutar, tx.kdv, tx.aciklama, "Manuel", "Manuel"
-    )
-    db.increment_belge(user["id"]) # Kotayı artır
-    return {"ok": True, "msg": "Islem kaydedildi"}
+# --- 4. OKUNAN VEYA MANUEL GİRİLEN VERİYİ VERİTABANINA KAYDETME ---
+@app.post("/api/transactions")
+def create_transaction(transaction: TransactionCreate, token: str, db: Session = Depends(get_db)):
+    user = get_current_user(token, db) # Kim olduğunu anla
+    new_tx = Transaction(**transaction.dict(), user_id=user.id)
+    db.add(new_tx)
+    db.commit()
+    return {"status": "success", "message": "İşlem kaydedildi"}
 
-@app.post("/api/upload")
-async def upload_document(file: UploadFile = File(...), user: dict = Depends(get_current_user)):
-    # KOTA KONTROLÜ (Yapay zeka için de geçerli)
-    if user["kullanilan_belge"] >= user["kota"]:
-        raise HTTPException(status_code=403, detail="Kotaniz doldu. Lutfen paket yukseltin.")
-    
-    contents = await file.read()
-    ai_result = ai.process_document_with_ai(contents, file.content_type)
-    
-    if not ai_result["ok"]:
-        raise HTTPException(status_code=500, detail=ai_result["err"])
-    
-    data = ai_result["data"]
-    db.add_transaction(
-        user["id"], data.get("tarih",""), data.get("islem_tipi",""), data.get("kategori",""),
-        data.get("firma",""), data.get("tutar",0.0), data.get("kdv",0.0), data.get("aciklama",""),
-        data.get("belge_turu",""), "Yapay Zeka"
-    )
-    db.increment_belge(user["id"]) # Kotayı artır
-    
-    return {"ok": True, "data": data}
-
+# --- 5. KULLANICININ KENDİ VERİLERİNİ ÇEKME (İşlemlerim Ekranı İçin) ---
 @app.get("/api/transactions")
-def get_transactions(user: dict = Depends(get_current_user)):
-    return {"transactions": db.get_user_transactions(user["id"])}
+def get_transactions(token: str, db: Session = Depends(get_db)):
+    user = get_current_user(token, db)
+    transactions = db.query(Transaction).filter(Transaction.user_id == user.id).all()
+    return transactions
+
+# --- 6. ADMİN BİLGİSİ (Kullanıcı Sayısı ve Toplam Tutar) ---
+@app.get("/api/admin/stats")
+def get_admin_stats(db: Session = Depends(get_db)):
+    # Üretime alırken buraya ekstra bir "sadece admin görebilir" şifresi koyacağız
+    total_users = db.query(User).count()
+    all_transactions = db.query(Transaction).all()
+    total_amount = sum(t.amount for t in all_transactions)
+    return {"total_users": total_users, "total_document_amount": total_amount}
