@@ -3,14 +3,22 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 import os
 import datetime
 
-# .env dosyasından (Vercel ayarlarına gireceğin) veritabanı linki
-DATABASE_URL = os.environ.get("DATABASE_URL") 
+DATABASE_URL = os.environ.get("DATABASE_URL", "")
 
-engine = create_engine(DATABASE_URL)
+# Supabase postgresql bağlantı protokolü düzeltmesi
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+# Bağlantı havuzu ve kopma koruması
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,
+    pool_recycle=300
+)
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# KULLANICI TABLOSU (Kayıt olanlar burada tutulacak)
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
@@ -19,7 +27,6 @@ class User(Base):
     hashed_password = Column(String)
     referral_code = Column(String, nullable=True)
 
-# İŞLEMLER TABLOSU (Kullanıcıların fişleri/faturaları burada tutulacak, silinmeyecek)
 class Transaction(Base):
     __tablename__ = "transactions"
     id = Column(Integer, primary_key=True, index=True)
@@ -28,14 +35,17 @@ class Transaction(Base):
     amount = Column(Float)
     tax = Column(Float)
     company = Column(String)
-    type = Column(String) # Gelir/Gider
+    type = Column(String)
     category = Column(String)
     description = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
-Base.metadata.create_all(bind=engine)
+def init_db():
+    try:
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(f"DB Init Error: {e}")
 
-# Veritabanı bağlantısını sağlayan fonksiyon
 def get_db():
     db = SessionLocal()
     try:
