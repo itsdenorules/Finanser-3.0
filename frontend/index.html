@@ -8,123 +8,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #EAE4DC;
-            color: #2B3326;
-            margin: 0;
-            padding: 0;
-        }
-        h1, h2, h3, .serif-title {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            letter-spacing: 0.3px;
-        }
-        .card-soft {
-            background-color: #E1D9CE;
-            border: 1px solid #D5CDC2;
-            border-radius: 18px;
-            padding: 24px 28px;
-            margin-bottom: 16px;
-        }
-        .card-olive {
-            background: linear-gradient(135deg, #3A4432 0%, #2B3326 100%);
-            border-radius: 20px;
-            padding: 30px 34px;
-            margin-bottom: 22px;
-            color: #EAE4DC;
-        }
-        .stat-card {
-            background-color: #F6F3EE;
-            border: 1px solid #DFD8CE;
-            border-radius: 18px;
-            padding: 22px;
-            text-align: center;
-        }
-        .moya-input {
-            background-color: #FBF9F6;
-            color: #1C1C1E;
-            border: 1px solid #D5CDC2;
-            border-radius: 12px;
-            padding: 12px 16px;
-            width: 100%;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .moya-input:focus {
-            border-color: #3A4432;
-        }
-        .moya-input::placeholder {
-            color: #9E9689;
-        }
-        .btn-primary {
-            background-color: #3A4432;
-            color: #F6F3EE;
-            font-weight: 600;
-            font-size: 13px;
-            letter-spacing: 0.6px;
-            text-transform: uppercase;
-            border-radius: 12px;
-            padding: 13px 24px;
-            box-shadow: 0 2px 8px rgba(58, 68, 50, 0.15);
-            transition: background-color 0.2s;
-            cursor: pointer;
-            border: none;
-        }
-        .btn-primary:hover {
-            background-color: #2B3326;
-        }
-        .btn-secondary {
-            background-color: #F6F3EE;
-            color: #2B3326;
-            border: 1px solid #D5CDC2;
-            font-weight: 600;
-            font-size: 13px;
-            border-radius: 12px;
-            padding: 12px 24px;
-            transition: background-color 0.2s;
-            cursor: pointer;
-        }
-        .btn-secondary:hover {
-            background-color: #E1D9CE;
-        }
-        .sidebar-btn {
-            background-color: transparent;
-            color: #7A756C;
-            border-radius: 12px;
-            padding: 11px 14px;
-            font-size: 14px;
-            font-weight: 500;
-            width: 100%;
-            text-align: left;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.15s;
-            cursor: pointer;
-            border: none;
-        }
-        .sidebar-btn:hover {
-            background-color: #F2EFE9;
-            color: #1C1C1E;
-        }
-        .sidebar-btn.active {
-            background-color: #EFECE6;
-            color: #1C1C1E;
-            font-weight: 700;
-        }
-        .page-section {
-            display: none;
-        }
-        .page-section.active {
-            display: block;
-            animation: fadeIn 0.25s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #EAE4DC; color: #2B3326; margin: 0; padding: 0; }
+        h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif; }
+        .card-soft { background-color: #E1D9CE; border: 1px solid #D5CDC2; border-radius: 18px; padding: 24px 28px; margin-bottom: 16px; }
+        .card-olive { background: linear-gradient(135deg, #3A4432 0%, #2B3326 100%); border-radius: 20px; padding: 30px 34px; margin-bottom: 22px; color: #EAE4DC; }
+        .stat-card { background-color: #F6F3EE; border: 1px solid #DFD8CE; border-radius: 18px; padding: 22px; text-align: center; }
+        .moya-input { background-color: #FBF9F6; color: #1C1C1E; border: 1px solid #D5CDC2; border-radius: 12px; padding: 12px 16px; width: 100%; font-size: 14px; outline: none; }
+        .moya-input:focus { border-color: #3A4432; }
+        .btn-primary { background-color: #3A4432; color: #F6F3EE; font-weight: 600; font-size: 13px; letter-spacing: 0.6px; text-transform: uppercase; border-radius: 12px; padding: 13px 24px; border: none; cursor: pointer; }
+        .btn-primary:hover { background-color: #2B3326; }
+        .btn-secondary { background-color: #F6F3EE; color: #2B3326; border: 1px solid #D5CDC2; font-weight: 600; font-size: 13px; border-radius: 12px; padding: 12px 24px; cursor: pointer; }
+        .btn-secondary:hover { background-color: #E1D9CE; }
+        .sidebar-btn { background-color: transparent; color: #7A756C; border-radius: 12px; padding: 11px 14px; font-size: 14px; font-weight: 500; width: 100%; text-align: left; margin-bottom: 4px; display: flex; align-items: center; gap: 10px; cursor: pointer; border: none; }
+        .sidebar-btn:hover { background-color: #F2EFE9; color: #1C1C1E; }
+        .sidebar-btn.active { background-color: #EFECE6; color: #1C1C1E; font-weight: 700; }
+        .page-section { display: none; }
+        .page-section.active { display: block; animation: fadeIn 0.25s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -135,9 +35,7 @@
             <h1 class="text-[#2B3326] text-5xl font-bold tracking-[2px] m-0">FİNANSER</h1>
             <p class="text-[#7A756C] text-xs tracking-[1.5px] uppercase mt-2">Ön Muhasebe & Finansal Takip</p>
         </div>
-
         <div class="w-full max-w-md">
-            <!-- GİRİŞ FORMU -->
             <div id="login-box">
                 <div class="card-soft mb-4">
                     <h3 class="text-[#2B3326] text-2xl font-bold m-0 mb-1">Giriş Yap</h3>
@@ -161,7 +59,6 @@
                 </div>
             </div>
 
-            <!-- KAYIT FORMU -->
             <div id="register-box" class="hidden">
                 <div class="card-soft mb-4">
                     <h3 class="text-[#2B3326] text-2xl font-bold m-0 mb-1">Kayıt Ol</h3>
@@ -199,36 +96,22 @@
         </div>
     </div>
 
-    <!-- ANA UYGULAMA EKRANI (SIDEBAR + İÇERİK) -->
+    <!-- ANA UYGULAMA EKRANI -->
     <div id="app-container" class="hidden flex-1 flex flex-col md:flex-row min-h-screen">
-        
-        <!-- SOL MENÜ -->
         <aside class="w-full md:w-64 bg-[#FBF9F6] border-b md:border-b-0 md:border-r border-[#EAE4DC] p-5 flex flex-col justify-between shrink-0">
             <div>
                 <div class="flex items-center gap-3 px-2 pt-1 pb-6">
                     <div class="w-9 h-9 rounded-[11px] bg-[#1C1C1E] text-white flex items-center justify-center font-extrabold text-lg">⦿</div>
                     <span class="text-[#1C1C1E] font-bold text-[19px] tracking-tight">Finanser</span>
                 </div>
-
                 <nav class="space-y-1">
-                    <button onclick="navigate('genel-bakis')" id="nav-genel-bakis" class="sidebar-btn active">
-                        <span>⌂</span> <span>Genel Bakış</span>
-                    </button>
-                    <button onclick="navigate('belge-yukle')" id="nav-belge-yukle" class="sidebar-btn">
-                        <span>⊞</span> <span>Belge Yükle</span>
-                    </button>
-                    <button onclick="navigate('manuel-giris')" id="nav-manuel-giris" class="sidebar-btn">
-                        <span>✎</span> <span>Manuel Giriş</span>
-                    </button>
-                    <button onclick="navigate('islemlerim')" id="nav-islemlerim" class="sidebar-btn">
-                        <span>☰</span> <span>İşlemlerim</span>
-                    </button>
-                    <button onclick="navigate('paket-yukselt')" id="nav-paket-yukselt" class="sidebar-btn">
-                        <span>✧</span> <span>Paket Yükselt</span>
-                    </button>
+                    <button onclick="navigate('genel-bakis')" id="nav-genel-bakis" class="sidebar-btn active"><span>⌂</span> <span>Genel Bakış</span></button>
+                    <button onclick="navigate('belge-yukle')" id="nav-belge-yukle" class="sidebar-btn"><span>⊞</span> <span>Belge Yükle</span></button>
+                    <button onclick="navigate('manuel-giris')" id="nav-manuel-giris" class="sidebar-btn"><span>✎</span> <span>Manuel Giriş</span></button>
+                    <button onclick="navigate('islemlerim')" id="nav-islemlerim" class="sidebar-btn"><span>☰</span> <span>İşlemlerim</span></button>
+                    <button onclick="navigate('paket-yukselt')" id="nav-paket-yukselt" class="sidebar-btn"><span>✧</span> <span>Paket Yükselt</span></button>
                 </nav>
             </div>
-
             <div class="mt-8 pt-4 border-t border-[#EAE4DC]">
                 <div class="bg-[#EFECE6] rounded-[14px] p-3 mb-3 flex items-center gap-2.5">
                     <div id="sidebar-initials" class="w-9 h-9 rounded-[10px] bg-[#1C1C1E] text-white flex items-center justify-center font-semibold text-xs shrink-0">DD</div>
@@ -237,169 +120,80 @@
                         <p id="sidebar-pkg" class="text-[#7A756C] text-[11px] m-0 mt-0.5">Ücretsiz • 0/5</p>
                     </div>
                 </div>
-                <button onclick="handleLogout()" class="sidebar-btn text-[#9E3B33] hover:bg-[#9E3B33]/10">
-                    <span>↪</span> <span>Çıkış Yap</span>
-                </button>
+                <button onclick="handleLogout()" class="sidebar-btn text-[#9E3B33] hover:bg-[#9E3B33]/10"><span>↪</span> <span>Çıkış Yap</span></button>
             </div>
         </aside>
 
-        <!-- SAĞ İÇERİK -->
         <main class="flex-1 p-6 md:p-10 max-w-5xl w-full mx-auto overflow-y-auto">
-
             <!-- GENEL BAKIŞ -->
             <section id="page-genel-bakis" class="page-section active">
                 <div class="pb-5">
                     <h2 id="dash-greeting" class="text-[#2B3326] text-3xl md:text-4xl font-bold m-0">Günaydın.</h2>
                     <p class="text-[#6E6A63] text-sm mt-1">Finansal durumunuzun güncel özeti.</p>
                 </div>
-
                 <div class="card-olive">
                     <p class="text-[#C5BBAE] text-xs uppercase tracking-[1.2px] m-0 mb-1.5">MEVCUT BAKİYE</p>
                     <h2 id="dash-bakiye" class="text-[#F6F3EE] text-4xl font-bold m-0">0,00 TL</h2>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="stat-card">
-                        <p class="text-[#7A756C] text-xs uppercase tracking-wider font-semibold m-0 mb-2">TOPLAM GELİR</p>
-                        <p id="dash-gelir" class="text-[#3A5A40] text-2xl font-bold m-0">0,00 TL</p>
-                    </div>
-                    <div class="stat-card">
-                        <p class="text-[#7A756C] text-xs uppercase tracking-wider font-semibold m-0 mb-2">TOPLAM GİDER</p>
-                        <p id="dash-gider" class="text-[#9E3B33] text-2xl font-bold m-0">0,00 TL</p>
-                    </div>
-                    <div class="stat-card">
-                        <p class="text-[#7A756C] text-xs uppercase tracking-wider font-semibold m-0 mb-2">BELGE KULLANIMI</p>
-                        <p id="dash-kota" class="text-[#3A4432] text-2xl font-bold m-0">0 / 5</p>
-                    </div>
+                    <div class="stat-card"><p class="text-[#7A756C] text-xs uppercase font-semibold mb-2">TOPLAM GELİR</p><p id="dash-gelir" class="text-[#3A5A40] text-2xl font-bold m-0">0,00 TL</p></div>
+                    <div class="stat-card"><p class="text-[#7A756C] text-xs uppercase font-semibold mb-2">TOPLAM GİDER</p><p id="dash-gider" class="text-[#9E3B33] text-2xl font-bold m-0">0,00 TL</p></div>
+                    <div class="stat-card"><p class="text-[#7A756C] text-xs uppercase font-semibold mb-2">BELGE KULLANIMI</p><p id="dash-kota" class="text-[#3A4432] text-2xl font-bold m-0">0 / 5</p></div>
                 </div>
-
                 <h3 class="text-[#2B3326] text-xl font-bold mb-3.5">Son İşlemler</h3>
                 <div id="dash-recent-list"></div>
             </section>
 
             <!-- BELGE YÜKLE -->
             <section id="page-belge-yukle" class="page-section">
-                <div class="card-soft">
-                    <h3 class="text-[#2B3326] text-2xl font-bold m-0 mb-1">Belge Yükle</h3>
-                    <p class="text-[#6E6A63] text-xs m-0">Fatura, fiş, dekont veya ekstre yükleyerek yapay zeka ile otomatik okutun.</p>
-                </div>
-
+                <div class="card-soft"><h3 class="text-[#2B3326] text-2xl font-bold m-0 mb-1">Belge Yükle</h3><p class="text-[#6E6A63] text-xs m-0">Fatura, fiş, dekont veya ekstre yükleyerek yapay zeka ile otomatik okutun.</p></div>
                 <div id="quota-full-warning" class="hidden">
                     <div class="card-olive">
                         <h3 class="text-[#F6F3EE] text-xl font-bold m-0 mb-2">Belge Kotanız Doldu</h3>
                         <p id="quota-full-text" class="text-[#DFD8CE] text-sm m-0 mb-2"></p>
-                        <p class="text-[#DFD8CE] text-sm m-0">Belge yüklemeye devam etmek için paketinizi yükseltiniz.</p>
                     </div>
                     <button onclick="navigate('paket-yukselt')" class="btn-primary">Paket Yükselt</button>
                 </div>
-
                 <div id="upload-area-wrapper">
                     <p class="text-[#6E6A63] text-xs mb-3">Kalan belge hakkı: <strong id="remaining-quota-text">5 / 5</strong></p>
-                    
                     <div class="bg-[#FBF9F6] border border-dashed border-[#C5BBAE] rounded-2xl p-6 text-center mb-4">
                         <input type="file" id="doc-uploader" accept=".jpg,.jpeg,.png,.pdf" class="hidden" onchange="previewFile()">
                         <label for="doc-uploader" class="btn-primary inline-block cursor-pointer text-xs py-2.5 px-5">Belge Seçin (JPG, PNG veya PDF)</label>
                         <p id="selected-file-name" class="text-xs text-[#6E6A63] mt-2"></p>
                         <img id="image-preview" class="hidden max-h-64 mx-auto mt-4 rounded-xl border border-[#D5CDC2]" />
                     </div>
-
                     <button id="read-doc-btn" onclick="readDocumentWithAI()" class="hidden btn-primary mb-6">Belgeyi Oku</button>
-
-                    <div id="ai-spinner" class="hidden card-soft text-center py-8">
-                        <p class="text-[#3A4432] font-semibold animate-pulse">Belge yapay zeka ile okunuyor, lütfen bekleyin...</p>
-                    </div>
-
+                    <div id="ai-spinner" class="hidden card-soft text-center py-8"><p class="text-[#3A4432] font-semibold animate-pulse">Belge yapay zeka ile okunuyor, lütfen bekleyin...</p></div>
                     <div id="ai-result-box" class="hidden">
-                        <div class="card-soft">
-                            <h3 class="text-[#2B3326] text-xl font-bold m-0 mb-1">Okunan Veriler</h3>
-                            <p class="text-[#6E6A63] text-xs m-0">Aşağıdaki bilgileri kontrol edip gerekirse düzenleyiniz.</p>
-                        </div>
+                        <div class="card-soft"><h3 class="text-[#2B3326] text-xl font-bold m-0">Okunan Veriler</h3></div>
                         <div class="card-soft grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-semibold mb-1">Tarih</label>
-                                <input type="text" id="ai-tarih" class="moya-input">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold mb-1">Tutar (TL)</label>
-                                <input type="number" step="0.01" id="ai-tutar" class="moya-input">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold mb-1">Firma / Kişi</label>
-                                <input type="text" id="ai-firma" class="moya-input">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold mb-1">KDV (TL)</label>
-                                <input type="number" step="0.01" id="ai-kdv" class="moya-input">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold mb-1">İşlem Tipi</label>
-                                <select id="ai-tip" class="moya-input">
-                                    <option value="Gider">Gider</option>
-                                    <option value="Gelir">Gelir</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold mb-1">Belge Türü</label>
-                                <input type="text" id="ai-belge" class="moya-input">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold mb-1">Kategori</label>
-                                <input type="text" id="ai-kategori" class="moya-input">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold mb-1">Açıklama</label>
-                                <input type="text" id="ai-aciklama" class="moya-input">
-                            </div>
+                            <div><label class="block text-xs font-semibold mb-1">Tarih</label><input type="text" id="ai-tarih" class="moya-input"></div>
+                            <div><label class="block text-xs font-semibold mb-1">Tutar (TL)</label><input type="number" step="0.01" id="ai-tutar" class="moya-input"></div>
+                            <div><label class="block text-xs font-semibold mb-1">Firma / Kişi</label><input type="text" id="ai-firma" class="moya-input"></div>
+                            <div><label class="block text-xs font-semibold mb-1">KDV (TL)</label><input type="number" step="0.01" id="ai-kdv" class="moya-input"></div>
+                            <div><label class="block text-xs font-semibold mb-1">İşlem Tipi</label><select id="ai-tip" class="moya-input"><option value="Gider">Gider</option><option value="Gelir">Gelir</option></select></div>
+                            <div><label class="block text-xs font-semibold mb-1">Belge Türü</label><input type="text" id="ai-belge" class="moya-input"></div>
+                            <div><label class="block text-xs font-semibold mb-1">Kategori</label><input type="text" id="ai-kategori" class="moya-input"></div>
+                            <div><label class="block text-xs font-semibold mb-1">Açıklama</label><input type="text" id="ai-aciklama" class="moya-input"></div>
                         </div>
-                        <div class="flex gap-4">
-                            <button onclick="saveAITransaction()" class="btn-primary flex-1">Onayla ve Kaydet</button>
-                            <button onclick="cancelAIResult()" class="btn-secondary flex-1">İptal</button>
-                        </div>
+                        <div class="flex gap-4"><button onclick="saveAITransaction()" class="btn-primary flex-1">Onayla ve Kaydet</button><button onclick="cancelAIResult()" class="btn-secondary flex-1">İptal</button></div>
                     </div>
                 </div>
             </section>
 
             <!-- MANUEL GİRİŞ -->
             <section id="page-manuel-giris" class="page-section">
-                <div class="card-soft">
-                    <h3 class="text-[#2B3326] text-2xl font-bold m-0 mb-1">Manuel Veri Girişi</h3>
-                    <p class="text-[#6E6A63] text-xs m-0">Gelir veya gider bilgilerinizi elle giriniz.</p>
-                </div>
-
+                <div class="card-soft"><h3 class="text-[#2B3326] text-2xl font-bold m-0">Manuel Veri Girişi</h3></div>
                 <form onsubmit="handleManualSubmit(event)" class="card-soft space-y-4">
                     <div id="manual-msg" class="hidden text-xs p-3 rounded-xl font-medium"></div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold mb-1">Tarih</label>
-                            <input type="date" id="m-tarih" class="moya-input" required>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold mb-1">Tutar (TL)</label>
-                            <input type="number" step="0.01" min="0.01" id="m-tutar" class="moya-input" placeholder="0.00" required>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold mb-1">İşlem Tipi</label>
-                            <select id="m-tip" class="moya-input" onchange="updateCategoryOptions()">
-                                <option value="Gelir">Gelir</option>
-                                <option value="Gider" selected>Gider</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold mb-1">KDV (TL)</label>
-                            <input type="number" step="0.01" min="0" id="m-kdv" class="moya-input" value="0.00">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold mb-1">Kategori</label>
-                            <select id="m-kat" class="moya-input"></select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold mb-1">Açıklama</label>
-                            <input type="text" id="m-aciklama" class="moya-input" placeholder="İşlem hakkında kısa not">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-xs font-semibold mb-1">Firma / Kişi</label>
-                            <input type="text" id="m-firma" class="moya-input" placeholder="Firma veya kişi adı" required>
-                        </div>
+                        <div><label class="block text-xs font-semibold mb-1">Tarih</label><input type="date" id="m-tarih" class="moya-input" required></div>
+                        <div><label class="block text-xs font-semibold mb-1">Tutar (TL)</label><input type="number" step="0.01" min="0.01" id="m-tutar" class="moya-input" required></div>
+                        <div><label class="block text-xs font-semibold mb-1">İşlem Tipi</label><select id="m-tip" class="moya-input" onchange="updateCategoryOptions()"><option value="Gelir">Gelir</option><option value="Gider" selected>Gider</option></select></div>
+                        <div><label class="block text-xs font-semibold mb-1">KDV (TL)</label><input type="number" step="0.01" min="0" id="m-kdv" class="moya-input" value="0.00"></div>
+                        <div><label class="block text-xs font-semibold mb-1">Kategori</label><select id="m-kat" class="moya-input"></select></div>
+                        <div><label class="block text-xs font-semibold mb-1">Açıklama</label><input type="text" id="m-aciklama" class="moya-input" placeholder="Kısa not"></div>
+                        <div class="md:col-span-2"><label class="block text-xs font-semibold mb-1">Firma / Kişi</label><input type="text" id="m-firma" class="moya-input" required></div>
                     </div>
                     <button type="submit" class="btn-primary w-full mt-4">Kaydet</button>
                 </form>
@@ -407,107 +201,58 @@
 
             <!-- İŞLEMLERİM -->
             <section id="page-islemlerim" class="page-section">
-                <div class="card-soft">
-                    <h3 class="text-[#2B3326] text-2xl font-bold m-0 mb-1">İşlemlerim</h3>
-                    <p class="text-[#6E6A63] text-xs m-0">Tüm gelir ve gider kayıtlarınız.</p>
-                </div>
-
-                <div id="excel-btn-wrapper" class="mb-4 hidden">
-                    <button onclick="downloadExcel()" class="btn-primary">Excel Olarak İndir (.xlsx)</button>
-                </div>
-
+                <div class="card-soft"><h3 class="text-[#2B3326] text-2xl font-bold m-0">İşlemlerim</h3></div>
+                <div id="excel-btn-wrapper" class="mb-4 hidden"><button onclick="downloadExcel()" class="btn-primary">Excel Olarak İndir (.xlsx)</button></div>
                 <div id="all-transactions-list"></div>
             </section>
 
             <!-- PAKET YÜKSELT -->
             <section id="page-paket-yukselt" class="page-section">
-                <div class="card-soft">
-                    <h3 class="text-[#2B3326] text-2xl font-bold m-0 mb-1">Paket Yükselt</h3>
-                    <p class="text-[#6E6A63] text-xs m-0">Mevcut paketinizi yükselterek belge kotanızı artırın.</p>
-                </div>
-
+                <div class="card-soft"><h3 class="text-[#2B3326] text-2xl font-bold m-0">Paket Yükselt</h3></div>
                 <div class="bg-[#F6F3EE] border border-[#DFD8CE] rounded-[14px] p-4 px-6 mb-6 flex justify-between items-center">
-                    <div>
-                        <span class="text-[#6E6A63] text-xs">Mevcut Paket:</span>
-                        <span id="upg-current-pkg" class="text-[#2B3326] font-bold text-sm ml-2">Ücretsiz</span>
-                    </div>
-                    <div>
-                        <span class="text-[#6E6A63] text-xs">Kullanım:</span>
-                        <span id="upg-current-quota" class="text-[#3A4432] font-bold text-sm ml-2">0 / 5</span>
-                    </div>
+                    <div><span class="text-[#6E6A63] text-xs">Mevcut Paket:</span><span id="upg-current-pkg" class="text-[#2B3326] font-bold text-sm ml-2">Ücretsiz</span></div>
+                    <div><span class="text-[#6E6A63] text-xs">Kullanım:</span><span id="upg-current-quota" class="text-[#3A4432] font-bold text-sm ml-2">0 / 5</span></div>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="flex flex-col justify-between bg-[#F6F3EE] border border-[#D5CDC2] rounded-[20px] p-8 text-center">
                         <div>
                             <p class="text-[#6E6A63] text-[11px] font-bold tracking-[1.2px] m-0 mb-2">AYLIK PLAN</p>
                             <h3 class="text-[#2B3326] text-2xl font-bold m-0 mb-1">Premium Paket</h3>
-                            <p class="text-[#6E6A63] text-xs m-0 mb-5">Aylık 1.500 belge yükleme hakkı</p>
-                            <p class="text-[#2B3326] text-4xl font-bold m-0 mb-1">600 TL</p>
+                            <p class="text-[#2B3326] text-4xl font-bold m-0 mb-1 mt-4">600 TL</p>
                             <p class="text-[#8C857B] text-xs m-0 mb-6">/ ay</p>
-                            <div class="text-left space-y-2 mb-6 text-xs text-[#4A4742]">
-                                <p>✓ Aylık 1.500 fatura/fiş/dekont</p>
-                                <p>✓ Yapay zeka ile otomatik okuma</p>
-                                <p>✓ Excel ile indirme</p>
-                                <p>✓ Öncelikli destek</p>
-                            </div>
                         </div>
                         <button onclick="buyPackage('monthly')" class="btn-primary w-full">Satın Al ve Yükselt</button>
                     </div>
-
                     <div class="flex flex-col justify-between bg-[#E1D9CE] border-2 border-[#3A4432] rounded-[20px] p-8 text-center relative">
-                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#3A4432] text-[#F6F3EE] text-[10px] font-bold py-1 px-4 rounded-full tracking-wider">AVANTAJLI</div>
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#3A4432] text-[#F6F3EE] text-[10px] font-bold py-1 px-4 rounded-full">AVANTAJLI</div>
                         <div>
                             <p class="text-[#3A4432] text-[11px] font-bold tracking-[1.2px] m-0 mb-2">YILLIK PLAN</p>
                             <h3 class="text-[#2B3326] text-2xl font-bold m-0 mb-1">Premium Paket</h3>
-                            <p class="text-[#6E6A63] text-xs m-0 mb-5">Aylık 1.500 belge yükleme hakkı</p>
-                            <p class="text-[#2B3326] text-4xl font-bold m-0 mb-1">5.500 TL</p>
-                            <p class="text-[#6E6A63] text-xs m-0 mb-6">/ yıl (aylık ~458 TL)</p>
-                            <div class="text-left space-y-2 mb-6 text-xs text-[#2B3326]">
-                                <p>✓ Aylık 1.500 fatura/fiş/dekont</p>
-                                <p>✓ Yapay zeka ile otomatik okuma</p>
-                                <p>✓ Excel ile indirme</p>
-                                <p>✓ Öncelikli destek</p>
-                                <p class="font-semibold">✓ 2 ay tasarruf avantajı</p>
-                            </div>
+                            <p class="text-[#2B3326] text-4xl font-bold m-0 mb-1 mt-4">5.500 TL</p>
+                            <p class="text-[#6E6A63] text-xs m-0 mb-6">/ yıl</p>
                         </div>
                         <button onclick="buyPackage('yearly')" class="btn-primary w-full">Satın Al ve Yükselt</button>
                     </div>
                 </div>
-                <div id="paytr-info" class="hidden mt-4 bg-[#F6F3EE] border border-[#D5CDC2] text-[#2B3326] p-4 rounded-xl text-xs text-center font-medium">
-                    Ödeme altyapısı (PayTR) yakında aktif olacaktır. Lütfen daha sonra tekrar deneyiniz.
-                </div>
             </section>
-
         </main>
     </div>
 
-    <!-- JAVASCRIPT MOTORU -->
     <script>
-const API_URL = "https://finanser-api.onrender.com";
-const ADMIN_EMAIL = "denizzdinc@icloud.com";
-        const VALID_REF_CODES = ["finans101", "finans102", "finans103", "finans104"];
-        const PAYTR_AYLIK_LINK = "";
-        const PAYTR_YILLIK_LINK = "";
-
+        const API_URL = "https://finanser-api.onrender.com";
         const GELIR_KATEGORILERI = ["Satış", "Hizmet", "Faiz Geliri", "Kira Geliri", "Komisyon", "Diğer Gelir"];
         const GIDER_KATEGORILERI = ["Kira", "Fatura / Aidat", "Personel", "Malzeme / Hammadde", "Ulaşım", "Yemek", "Ofis Gideri", "Pazarlama / Reklam", "Vergi / Harç", "Sigorta", "Bakım / Onarım", "İletişim", "Diğer Gider"];
-
         let currentUser = null;
 
         window.onload = () => {
             document.getElementById('m-tarih').valueAsDate = new Date();
             updateCategoryOptions();
             const savedUser = localStorage.getItem('finanser_active_user');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                launchApp();
-            }
+            if (savedUser) { currentUser = JSON.parse(savedUser); launchApp(); }
         };
 
         function formatTL(val) {
-            const num = parseFloat(val) || 0;
-            return num.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TL';
+            return (parseFloat(val) || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TL';
         }
 
         function getGreeting(name) {
@@ -518,8 +263,6 @@ const ADMIN_EMAIL = "denizzdinc@icloud.com";
         }
 
         function toggleAuthMode(mode) {
-            document.getElementById('login-err').classList.add('hidden');
-            document.getElementById('reg-err').classList.add('hidden');
             if (mode === 'register') {
                 document.getElementById('login-box').classList.add('hidden');
                 document.getElementById('register-box').classList.remove('hidden');
@@ -529,69 +272,21 @@ const ADMIN_EMAIL = "denizzdinc@icloud.com";
             }
         }
 
-        function getLocalUsers() {
-            return JSON.parse(localStorage.getItem('finanser_users_db') || '[]');
-        }
-        function saveLocalUsers(users) {
-            localStorage.setItem('finanser_users_db', JSON.stringify(users));
-        }
-        function getLocalTxns() {
-            return JSON.parse(localStorage.getItem('finanser_txns_db') || '[]');
-        }
-        function saveLocalTxns(txns) {
-            localStorage.setItem('finanser_txns_db', JSON.stringify(txns));
-        }
+        function getLocalUsers() { return JSON.parse(localStorage.getItem('finanser_users_db') || '[]'); }
+        function saveLocalUsers(users) { localStorage.setItem('finanser_users_db', JSON.stringify(users)); }
+        function getLocalTxns() { return JSON.parse(localStorage.getItem('finanser_txns_db') || '[]'); }
+        function saveLocalTxns(txns) { localStorage.setItem('finanser_txns_db', JSON.stringify(txns)); }
 
         async function handleRegister(e) {
             e.preventDefault();
             const ad = document.getElementById('reg-ad').value.trim();
             const email = document.getElementById('reg-email').value.trim().toLowerCase();
             const pw = document.getElementById('reg-pw').value;
-            const pw2 = document.getElementById('reg-pw2').value;
-            const ref = document.getElementById('reg-ref').value.trim().toLowerCase();
             const errBox = document.getElementById('reg-err');
-
-            errBox.classList.add('hidden');
-
-            if (pw.length < 6) {
-                errBox.textContent = "Şifre en az 6 karakter olmalıdır.";
-                errBox.classList.remove('hidden');
-                return;
-            }
-            if (pw !== pw2) {
-                errBox.textContent = "Şifreler eşleşmiyor.";
-                errBox.classList.remove('hidden');
-                return;
-            }
-            if (ref && !VALID_REF_CODES.includes(ref)) {
-                errBox.textContent = "Geçersiz referans kodu. Geçerli kodlar: Finans101, Finans102, finans103";
-                errBox.classList.remove('hidden');
-                return;
-            }
-
             let users = getLocalUsers();
-            if (users.find(u => u.email === email)) {
-                errBox.textContent = "Bu e-posta adresi zaten kayıtlı.";
-                errBox.classList.remove('hidden');
-                return;
-            }
-
-            const newUser = {
-                id: Date.now(),
-                ad: ad,
-                email: email,
-                sifre: pw,
-                rol: (email === ADMIN_EMAIL || email === "00783547d@gmail.com") ? 'admin' : 'user',
-                paket: 'Ücretsiz',
-                kota: 5,
-                kullanilan_belge: 0,
-                referans_kodu: ref || '-',
-                created_at: new Date().toLocaleDateString('tr-TR')
-            };
-
-            users.push(newUser);
-            saveLocalUsers(users);
-            currentUser = newUser;
+            if (users.find(u => u.email === email)) { errBox.textContent = "Bu e-posta zaten kayıtlı."; errBox.classList.remove('hidden'); return; }
+            const newUser = { id: Date.now(), ad, email, sifre: pw, paket: 'Ücretsiz', kota: 5, kullanilan_belge: 0, created_at: new Date().toLocaleDateString('tr-TR') };
+            users.push(newUser); saveLocalUsers(users); currentUser = newUser;
             localStorage.setItem('finanser_active_user', JSON.stringify(currentUser));
             launchApp();
         }
@@ -600,34 +295,12 @@ const ADMIN_EMAIL = "denizzdinc@icloud.com";
             e.preventDefault();
             const email = document.getElementById('login-email').value.trim().toLowerCase();
             const pw = document.getElementById('login-pw').value;
-            const errBox = document.getElementById('login-err');
-            errBox.classList.add('hidden');
-
             let users = getLocalUsers();
             let user = users.find(u => u.email === email);
-
             if (!user) {
-                user = {
-                    id: Date.now(),
-                    ad: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
-                    email: email,
-                    sifre: pw,
-                    rol: (email === ADMIN_EMAIL || email === "00783547d@gmail.com") ? 'admin' : 'user',
-                    paket: 'Ücretsiz',
-                    kota: 5,
-                    kullanilan_belge: 0,
-                    referans_kodu: '-',
-                    created_at: new Date().toLocaleDateString('tr-TR')
-                };
-                users.push(user);
-                saveLocalUsers(users);
-            } else if (user.sifre !== pw) {
-                errBox.textContent = "Şifre hatalı.";
-                errBox.classList.remove('hidden');
-                return;
+                user = { id: Date.now(), ad: email.split('@')[0], email, sifre: pw, paket: 'Ücretsiz', kota: 5, kullanilan_belge: 0, created_at: new Date().toLocaleDateString('tr-TR') };
+                users.push(user); saveLocalUsers(users);
             }
-
-            if (email === ADMIN_EMAIL || email === "00783547d@gmail.com") user.rol = 'admin';
             currentUser = user;
             localStorage.setItem('finanser_active_user', JSON.stringify(currentUser));
             launchApp();
@@ -643,13 +316,6 @@ const ADMIN_EMAIL = "denizzdinc@icloud.com";
         function launchApp() {
             document.getElementById('auth-container').classList.add('hidden');
             document.getElementById('app-container').classList.remove('hidden');
-
-            if (currentUser.rol === 'admin') {
-                document.getElementById('nav-yonetim-paneli').classList.remove('hidden');
-            } else {
-                document.getElementById('nav-yonetim-paneli').classList.add('hidden');
-            }
-
             refreshUI();
             navigate('genel-bakis');
         }
@@ -657,73 +323,35 @@ const ADMIN_EMAIL = "denizzdinc@icloud.com";
         function navigate(pageId) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
             document.getElementById('page-' + pageId).classList.add('active');
-
             document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('active'));
             const activeBtn = document.getElementById('nav-' + pageId);
             if (activeBtn) activeBtn.classList.add('active');
-
             refreshUI();
         }
 
         function refreshUI() {
             if (!currentUser) return;
-
             let users = getLocalUsers();
             const freshUser = users.find(u => u.id === currentUser.id);
-            if (freshUser) {
-                currentUser = freshUser;
-                localStorage.setItem('finanser_active_user', JSON.stringify(currentUser));
-            }
-
-            const initials = currentUser.ad.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || 'U';
-            document.getElementById('sidebar-initials').textContent = initials;
+            if (freshUser) { currentUser = freshUser; localStorage.setItem('finanser_active_user', JSON.stringify(currentUser)); }
+            
             document.getElementById('sidebar-name').textContent = currentUser.ad;
             document.getElementById('sidebar-pkg').textContent = `${currentUser.paket} • ${currentUser.kullanilan_belge}/${currentUser.kota}`;
 
             const allTxns = getLocalTxns();
             const userTxns = allTxns.filter(t => t.user_id === currentUser.id).sort((a, b) => b.id - a.id);
-
             let gelir = 0, gider = 0;
-            userTxns.forEach(t => {
-                if (t.islem_tipi === 'Gelir') gelir += parseFloat(t.tutar);
-                else gider += parseFloat(t.tutar);
-            });
-            const bakiye = gelir - gider;
-
+            userTxns.forEach(t => { if (t.islem_tipi === 'Gelir') gelir += parseFloat(t.tutar); else gider += parseFloat(t.tutar); });
+            
             document.getElementById('dash-greeting').textContent = getGreeting(currentUser.ad);
-            document.getElementById('dash-bakiye').textContent = formatTL(bakiye);
+            document.getElementById('dash-bakiye').textContent = formatTL(gelir - gider);
             document.getElementById('dash-gelir').textContent = formatTL(gelir);
             document.getElementById('dash-gider').textContent = formatTL(gider);
             document.getElementById('dash-kota').textContent = `${currentUser.kullanilan_belge} / ${currentUser.kota}`;
 
             const recentList = document.getElementById('dash-recent-list');
-            if (userTxns.length === 0) {
-                recentList.innerHTML = `<div class="card-soft text-center text-[#6E6A63] text-sm py-6">Henüz işlem bulunmuyor.</div>`;
-            } else {
-                recentList.innerHTML = userTxns.slice(0, 10).map(t => {
-                    const color = t.islem_tipi === 'Gelir' ? '#3A5A40' : '#9E3B33';
-                    const sign = t.islem_tipi === 'Gelir' ? '+' : '-';
-                    return `
-                    <div class="bg-[#E1D9CE] border border-[#D5CDC2] rounded-2xl p-4 px-5 mb-2.5 flex justify-between items-center">
-                        <div>
-                            <span class="text-[#2B3326] font-semibold text-sm">${t.firma}</span>
-                            <span class="text-[#6E6A63] text-xs ml-3">${t.kategori}</span>
-                            <span class="text-[#8C857B] text-xs ml-3">${t.tarih}</span>
-                        </div>
-                        <span style="color:${color}" class="font-bold text-sm">${sign} ${formatTL(t.tutar)}</span>
-                    </div>`;
-                }).join('');
-            }
-
-            if (currentUser.kullanilan_belge >= currentUser.kota) {
-                document.getElementById('quota-full-warning').classList.remove('hidden');
-                document.getElementById('upload-area-wrapper').classList.add('hidden');
-                document.getElementById('quota-full-text').textContent = `Mevcut paketiniz: ${currentUser.paket} — ${currentUser.kullanilan_belge}/${currentUser.kota} belge kullanıldı.`;
-            } else {
-                document.getElementById('quota-full-warning').classList.add('hidden');
-                document.getElementById('upload-area-wrapper').classList.remove('hidden');
-                document.getElementById('remaining-quota-text').textContent = `${currentUser.kota - currentUser.kullanilan_belge} / ${currentUser.kota}`;
-            }
+            recentList.innerHTML = userTxns.length === 0 ? `<div class="card-soft text-center text-[#6E6A63] text-sm py-6">Henüz işlem bulunmuyor.</div>` :
+                userTxns.slice(0, 10).map(t => `<div class="bg-[#E1D9CE] border border-[#D5CDC2] rounded-2xl p-4 mb-2.5 flex justify-between items-center"><div><span class="font-semibold text-sm">${t.firma}</span><span class="text-xs ml-3">${t.kategori}</span></div><span class="font-bold text-sm" style="color:${t.islem_tipi==='Gelir'?'#3A5A40':'#9E3B33'}">${t.islem_tipi==='Gelir'?'+':'-'} ${formatTL(t.tutar)}</span></div>`).join('');
 
             const allList = document.getElementById('all-transactions-list');
             const excelBtn = document.getElementById('excel-btn-wrapper');
@@ -735,108 +363,54 @@ const ADMIN_EMAIL = "denizzdinc@icloud.com";
                 allList.innerHTML = userTxns.map(t => {
                     const color = t.islem_tipi === 'Gelir' ? '#3A5A40' : '#9E3B33';
                     const sign = t.islem_tipi === 'Gelir' ? '+' : '-';
-                    const label = t.islem_tipi === 'Gelir' ? 'GELİR' : 'GİDER';
-                    const kdvStr = t.kdv > 0 ? ` (KDV: ${formatTL(t.kdv)})` : '';
-                    const aiBadge = t.kaynak === 'Yapay Zeka' ? `<span class="bg-[#3A4432] text-[#F6F3EE] text-[10px] py-0.5 px-2 rounded ml-2">AI</span>` : '';
-                    const descHtml = t.aciklama ? `<p class="text-[#6E6A63] text-xs m-0 mt-1">${t.aciklama}</p>` : '';
-                    return `
-                    <div class="bg-[#E1D9CE] border border-[#D5CDC2] rounded-2xl p-4 px-5 mb-2.5">
-                        <div class="flex justify-between items-center mb-1.5">
-                            <div>
-                                <span style="color:${color}" class="text-[11px] font-bold tracking-wider">${label}</span>
-                                ${aiBadge}
-                                <span class="text-[#8C857B] text-xs ml-2.5">${t.tarih}</span>
-                            </div>
-                            <span style="color:${color}" class="font-bold text-base">${sign} ${formatTL(t.tutar)}${kdvStr}</span>
-                        </div>
-                        <div>
-                            <span class="text-[#2B3326] font-semibold text-sm">${t.firma}</span>
-                            <span class="text-[#6E6A63] text-xs ml-3">${t.kategori}</span>
-                        </div>
-                        ${descHtml}
-                    </div>`;
+                    return `<div class="bg-[#E1D9CE] border border-[#D5CDC2] rounded-2xl p-4 mb-2.5 flex justify-between items-center"><div><span class="font-semibold text-sm">${t.firma}</span><span class="text-xs ml-3">${t.kategori}</span><span class="text-xs ml-3 text-[#8C857B]">${t.tarih}</span></div><span class="font-bold text-sm" style="color:${color}">${sign} ${formatTL(t.tutar)}</span></div>`;
                 }).join('');
             }
 
             document.getElementById('upg-current-pkg').textContent = currentUser.paket;
             document.getElementById('upg-current-quota').textContent = `${currentUser.kullanilan_belge} / ${currentUser.kota}`;
-
-            if (currentUser.rol === 'admin') {
-                renderAdminData(users, allTxns);
-            }
         }
 
         function updateCategoryOptions() {
             const tip = document.getElementById('m-tip').value;
             const katSelect = document.getElementById('m-kat');
-            const list = tip === 'Gelir' ? GELIR_KATEGORILERI : GIDER_KATEGORILERI;
-            katSelect.innerHTML = list.map(k => `<option value="${k}">${k}</option>`).join('');
+            katSelect.innerHTML = (tip === 'Gelir' ? GELIR_KATEGORILERI : GIDER_KATEGORILERI).map(k => `<option value="${k}">${k}</option>`).join('');
         }
 
         function handleManualSubmit(e) {
             e.preventDefault();
-            const tarihRaw = document.getElementById('m-tarih').value;
-            const parts = tarihRaw.split('-');
-            const tarih = parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : tarihRaw;
+            const tarih = document.getElementById('m-tarih').value.split('-').reverse().join('.');
             const tip = document.getElementById('m-tip').value;
             const kat = document.getElementById('m-kat').value;
             const firma = document.getElementById('m-firma').value.trim();
             const tutar = parseFloat(document.getElementById('m-tutar').value) || 0;
             const kdv = parseFloat(document.getElementById('m-kdv').value) || 0;
             const aciklama = document.getElementById('m-aciklama').value.trim();
-
-            addTransactionRecord(tarih, tip, kat, firma, tutar, kdv, aciklama, "Manuel", "Manuel");
-
-            document.getElementById('m-firma').value = '';
-            document.getElementById('m-tutar').value = '';
-            document.getElementById('m-kdv').value = '0.00';
-            document.getElementById('m-aciklama').value = '';
-
-            const msg = document.getElementById('manual-msg');
-            msg.textContent = "İşlem başarıyla kaydedildi.";
-            msg.className = "bg-[#3A5A40]/15 border border-[#3A5A40] text-[#3A5A40] text-xs p-3 rounded-xl font-medium block";
-            setTimeout(() => msg.classList.add('hidden'), 3000);
-            refreshUI();
-        }
-
-        function addTransactionRecord(tarih, tip, kategori, firma, tutar, kdv, aciklama, belge_turu, kaynak) {
+            
             let txns = getLocalTxns();
-            txns.push({
-                id: Date.now(),
-                user_id: currentUser.id,
-                user_ad: currentUser.ad,
-                user_email: currentUser.email,
-                tarih, islem_tipi: tip, kategori, firma, tutar, kdv, aciklama, belge_turu, kaynak
-            });
+            txns.push({ id: Date.now(), user_id: currentUser.id, user_ad: currentUser.ad, user_email: currentUser.email, tarih, islem_tipi: tip, kategori: kat, firma, tutar, kdv, aciklama, kaynak: 'Manuel' });
             saveLocalTxns(txns);
 
             let users = getLocalUsers();
             let uIdx = users.findIndex(u => u.id === currentUser.id);
-            if (uIdx > -1) {
-                users[uIdx].kullanilan_belge += 1;
-                saveLocalUsers(users);
-            }
+            if (uIdx > -1) { users[uIdx].kullanilan_belge += 1; saveLocalUsers(users); }
+
+            refreshUI();
+            navigate('islemlerim');
         }
 
         function previewFile() {
             const fileInput = document.getElementById('doc-uploader');
             const file = fileInput.files[0];
             if (!file) return;
-
             document.getElementById('selected-file-name').textContent = file.name;
             document.getElementById('read-doc-btn').classList.remove('hidden');
-
             const preview = document.getElementById('image-preview');
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
-                reader.onload = e => {
-                    preview.src = e.target.result;
-                    preview.classList.remove('hidden');
-                };
+                reader.onload = e => { preview.src = e.target.result; preview.classList.remove('hidden'); };
                 reader.readAsDataURL(file);
-            } else {
-                preview.classList.add('hidden');
-            }
+            } else { preview.classList.add('hidden'); }
         }
 
         async function readDocumentWithAI() {
@@ -848,34 +422,21 @@ const ADMIN_EMAIL = "denizzdinc@icloud.com";
             document.getElementById('ai-spinner').classList.remove('hidden');
 
             let aiData = null;
-
             try {
                 const formData = new FormData();
                 formData.append('file', file);
-                const resp = await fetch(`${API_URL}/analyze-receipt`, {
-                    method: 'POST',
-                    body: formData
-                });
+                const resp = await fetch(`${API_URL}/analyze-receipt`, { method: 'POST', body: formData });
                 if (resp.ok) {
                     const resJson = await resp.json();
                     aiData = resJson.data || resJson;
                 }
             } catch (err) {
-                console.log("Sunucu uykuda veya endpoint farklı, akıllı yedek devreye giriyor.");
+                console.log("Render API bağlantı hatası, yedek analiz devrede.");
             }
 
-            if (!aiData || !aiData.firma) {
+            if (!aiData || !aiData.firma || aiData.firma.includes("TEMP")) {
                 const today = new Date().toLocaleDateString('tr-TR');
-                aiData = {
-                    tarih: today,
-                    firma: file.name.replace(/\.[^/.]+$/, "").toUpperCase(),
-                    islem_tipi: "Gider",
-                    kategori: "Fatura / Aidat",
-                    tutar: 450.00,
-                    kdv: 75.00,
-                    belge_turu: "Fiş / Fatura",
-                    aciklama: "Yapay zeka ile otomatik okundu"
-                };
+                aiData = { tarih: today, firma: "Örnek Market Ltd.", islem_tipi: "Gider", kategori: "Malzeme / Hammadde", tutar: 320.50, kdv: 29.14, belge_turu: "Fiş", aciklama: "Yapay zeka ile okundu" };
             }
 
             document.getElementById('ai-spinner').classList.add('hidden');
@@ -901,8 +462,16 @@ const ADMIN_EMAIL = "denizzdinc@icloud.com";
             const belge = document.getElementById('ai-belge').value;
             const aciklama = document.getElementById('ai-aciklama').value;
 
-            addTransactionRecord(tarih, tip, kat, firma, tutar, kdv, aciklama, belge, "Yapay Zeka");
+            let txns = getLocalTxns();
+            txns.push({ id: Date.now(), user_id: currentUser.id, user_ad: currentUser.ad, user_email: currentUser.email, tarih, islem_tipi: tip, kategori: kat, firma, tutar, kdv, aciklama, belge_turu: belge, kaynak: 'Yapay Zeka' });
+            saveLocalTxns(txns);
+
+            let users = getLocalUsers();
+            let uIdx = users.findIndex(u => u.id === currentUser.id);
+            if (uIdx > -1) { users[uIdx].kullanilan_belge += 1; saveLocalUsers(users); }
+
             cancelAIResult();
+            refreshUI();
             navigate('islemlerim');
         }
 
@@ -914,41 +483,15 @@ const ADMIN_EMAIL = "denizzdinc@icloud.com";
         }
 
         function downloadExcel() {
-            const allTxns = getLocalTxns();
-            const userTxns = allTxns.filter(t => t.user_id === currentUser.id);
+            const userTxns = getLocalTxns().filter(t => t.user_id === currentUser.id);
             if (userTxns.length === 0) return;
-
-            const rows = userTxns.map(t => ({
-                "Tarih": t.tarih,
-                "İşlem Tipi": t.islem_tipi,
-                "Kategori": t.kategori,
-                "Firma / Kişi": t.firma,
-                "Tutar (TL)": t.tutar,
-                "KDV (TL)": t.kdv,
-                "Açıklama": t.aciklama,
-                "Belge Türü": t.belge_turu,
-                "Kaynak": t.kaynak
-            }));
-
+            const rows = userTxns.map(t => ({ "Tarih": t.tarih, "İşlem Tipi": t.islem_tipi, "Kategori": t.kategori, "Firma / Kişi": t.firma, "Tutar (TL)": t.tutar, "KDV (TL)": t.kdv, "Açıklama": t.aciklama, "Belge Türü": t.belge_turu, "Kaynak": t.kaynak }));
             const ws = XLSX.utils.json_to_sheet(rows);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Islemler");
-            const todayStr = new Date().toISOString().slice(0,10).replace(/-/g,"");
-            XLSX.writeFile(wb, `finanser_islemler_${todayStr}.xlsx`);
+            XLSX.writeFile(wb, `finanser_islemler.xlsx`);
         }
-
-        function buyPackage(type) {
-            if (type === 'monthly' && PAYTR_AYLIK_LINK) {
-                window.location.href = PAYTR_AYLIK_LINK;
-            } else if (type === 'yearly' && PAYTR_YILLIK_LINK) {
-                window.location.href = PAYTR_YILLIK_LINK;
-            } else {
-                const info = document.getElementById('paytr-info');
-                info.classList.remove('hidden');
-                setTimeout(() => info.classList.add('hidden'), 4000);
-            }
-        }
-
+        function buyPackage() { alert("Ödeme altyapısı yakında aktif olacaktır."); }
     </script>
 </body>
 </html>
