@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanser - Admin Kontrol Merkezi</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #EAE4DC; color: #1C1C1E; font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3 { font-family: 'Cormorant Garamond', serif; }
+        .glass-panel { background-color: #FBF9F6; border: 1px solid #D5CDC2; border-radius: 16px; }
+        .btn-primary { background-color: #3A4432; color: #F6F3EE; }
+        .btn-primary:hover { background-color: #2B3326; }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-6xl mx-auto">
+        
+        <!-- Üst Kısım -->
+        <header class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+            <div>
+                <h1 class="text-4xl font-bold text-[#2B3326] tracking-wide">Yönetim Paneli</h1>
+                <p class="text-gray-600 mt-1">Kullanıcıları, kotaları ve sistem istatistiklerini yönetin.</p>
+            </div>
+            <button class="btn-primary px-6 py-3 rounded-xl font-bold text-sm uppercase tracking-wide shadow-md transition">
+                Çıkış Yap
+            </button>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Sol Taraf: Özet İstatistikler -->
+            <div class="col-span-1 space-y-6">
+                <div class="glass-panel p-6 shadow-sm">
+                    <h2 class="text-xl font-bold mb-5 border-b border-[#D5CDC2] pb-2">Sistem Özeti</h2>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 text-sm font-semibold uppercase tracking-wider">Toplam Kullanıcı</span>
+                            <span class="font-bold text-xl" id="total-users">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 text-sm font-semibold uppercase tracking-wider">Premium Üyeler</span>
+                            <span class="font-bold text-xl text-green-700" id="premium-users">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 text-sm font-semibold uppercase tracking-wider">Okunan Fiş</span>
+                            <span class="font-bold text-xl" id="total-docs">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sağ Taraf: Kullanıcı Tablosu -->
+            <div class="col-span-2 glass-panel p-6 shadow-sm">
+                <h2 class="text-xl font-bold mb-6">Kullanıcı Yönetimi</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b-2 border-[#D5CDC2] text-xs uppercase tracking-widest text-gray-500">
+                                <th class="pb-3 pr-4">Kullanıcı</th>
+                                <th class="pb-3 pr-4">Paket</th>
+                                <th class="pb-3 pr-4">Kota Durumu</th>
+                                <th class="pb-3">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-table-body" class="text-sm">
+                            <!-- Örnek Satır (API bağlanınca otomatik dolacak) -->
+                            <tr class="border-b border-[#D5CDC2] hover:bg-[#F2EFE9] transition-colors">
+                                <td class="py-4 pr-4">
+                                    <p class="font-bold text-[#2B3326]">Deniz Dinç</p>
+                                    <p class="text-xs text-gray-500">denizzdinc@icloud.com</p>
+                                </td>
+                                <td class="py-4 pr-4">
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold border border-green-200">Premium</span>
+                                </td>
+                                <td class="py-4 pr-4 font-semibold text-gray-700">12 / 1500</td>
+                                <td class="py-4">
+                                    <button class="text-xs bg-[#E1D9CE] hover:bg-[#D5CDC2] px-3 py-2 rounded-lg font-bold text-[#3A4432] transition shadow-sm">Düzenle</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
