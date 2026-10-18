@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanser - Premium Finans Yönetimi</title>
+    
+    <!-- Tailwind CSS (Şimşek Hızında Tasarım Motoru) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lüks Fontlar: Başlıklar için Garamond, Metinler için Plus Jakarta -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        // MOYA/Apple Renk Paleti ve Tasarım Ayarları
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        krem: '#EAE4DC',
+                        kart: '#FBF9F6',
+                        buton: '#3A4432',
+                        butonHover: '#2B3326',
+                        metinKoyu: '#1C1C1E',
+                        borderRengi: '#D5CDC2'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Cormorant Garamond', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #EAE4DC; color: #1C1C1E; }
+        .glass-panel { 
+            background-color: #FBF9F6; 
+            border: 1px solid #D5CDC2; 
+            border-radius: 20px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03); 
+        }
+        .green-card {
+            background-color: #3A4432;
+            color: #F6F3EE;
+            border-radius: 20px;
+        }
+        /* Menü geçişlerinde sayfa yenilenmesini engellemek için görünümleri gizliyoruz */
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="antialiased min-h-screen font-sans">
+
+    <!-- UYGULAMA KONTEYNERİ -->
+    <div class="max-w-md mx-auto min-h-screen flex flex-col pt-8 px-5 pb-24 relative">
+        
+        <!-- ÜST BİLGİ (Sadece giriş yapınca görünür) -->
+        <header id="app-header" class="hidden mb-8">
+            <h1 class="font-serif text-4xl font-bold tracking-wide text-[#2B3326]">Günaydın, <span id="user-name">Deniz</span>.</h1>
+            <p class="text-sm text-gray-600 mt-1">Finansal durumunuzun güncel özeti.</p>
+        </header>
+
+        <!-- 1. GİRİŞ EKRANI (Varsayılan) -->
+        <section id="login-view" class="view-section active flex-1 flex flex-col justify-center">
+            <div class="text-center mb-10">
+                <h1 class="font-serif text-5xl font-bold text-[#2B3326] mb-2">Finanser</h1>
+                <p class="text-sm text-gray-600">Premium Finans Asistanınız</p>
+            </div>
+            
+            <div class="glass-panel p-6">
+                <input type="email" id="email" placeholder="E-posta Adresiniz" class="w-full bg-transparent border-b border-borderRengi p-3 mb-4 focus:outline-none focus:border-buton transition-colors text-metinKoyu placeholder-gray-400">
+                <input type="password" id="sifre" placeholder="Şifreniz" class="w-full bg-transparent border-b border-borderRengi p-3 mb-8 focus:outline-none focus:border-buton transition-colors text-metinKoyu placeholder-gray-400">
+                
+                <button onclick="login()" class="w-full bg-buton hover:bg-butonHover text-white font-semibold tracking-wide uppercase text-sm py-4 rounded-xl transition-all shadow-md">
+                    Giriş Yap
+                </button>
+            </div>
+        </section>
+
+        <!-- 2. ANA KONTROL PANELİ (Dashboard) -->
+        <section id="dashboard-view" class="view-section">
+            <!-- Ana Bakiye Kartı -->
+            <div class="green-card p-6 mb-4 shadow-lg">
+                <p class="text-xs uppercase tracking-widest opacity-80 mb-2">Mevcut Bakiye</p>
+                <h2 class="font-serif text-4xl" id="bakiye">0,00 TL</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="glass-panel p-5 text-center">
+                    <p class="text-xs uppercase tracking-wider text-gray-500 mb-1">Toplam Gelir</p>
+                    <p class="font-bold text-lg text-green-700" id="gelir">0,00 TL</p>
+                </div>
+                <div class="glass-panel p-5 text-center">
+                    <p class="text-xs uppercase tracking-wider text-gray-500 mb-1">Toplam Gider</p>
+                    <p class="font-bold text-lg text-red-700" id="gider">0,00 TL</p>
+                </div>
+            </div>
+
+            <!-- Kota Kartı -->
+            <div class="glass-panel p-5 text-center flex justify-between items-center">
+                <p class="text-xs uppercase tracking-wider text-gray-500">Belge Kullanımı</p>
+                <p class="font-bold text-xl font-serif text-[#2B3326]"><span id="kullanilan">0</span> / <span id="kota">5</span></p>
+            </div>
+        </section>
+
+        <!-- ALT NAVİGASYON (Giriş yapınca görünür) -->
+        <nav id="bottom-nav" class="hidden fixed bottom-0 left-0 right-0 bg-[#FBF9F6] border-t border-[#D5CDC2] pb-6 pt-3 px-6 flex justify-around items-center max-w-md mx-auto rounded-t-3xl shadow-[0_-5px_15px_rgba(0,0,0,0.03)] z-50">
+            <button onclick="switchView('dashboard-view')" class="flex flex-col items-center text-gray-500 hover:text-buton transition-colors">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                <span class="text-[10px] uppercase font-bold tracking-wider">Özet</span>
+            </button>
+            <button class="bg-buton text-white p-4 rounded-full -mt-8 shadow-lg hover:bg-butonHover transition-transform transform hover:scale-105">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            </button>
+            <button class="flex flex-col items-center text-gray-500 hover:text-buton transition-colors">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <span class="text-[10px] uppercase font-bold tracking-wider">İşlemler</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Uygulama Mantığı (JavaScript) -->
+    <script>
+        // İleride Python sunucumuzu çalıştırdığımızda buraya o sunucunun linki gelecek
+        const API_URL = "http://127.0.0.1:8000"; 
+
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+        }
+
+        // Demo amaçlı giriş animasyonu
+        function login() {
+            const btn = document.querySelector('button');
+            btn.innerHTML = "Giriş Yapılıyor...";
+            
+            setTimeout(() => {
+                document.getElementById('app-header').classList.remove('hidden');
+                document.getElementById('bottom-nav').classList.remove('hidden');
+                document.getElementById('bottom-nav').classList.add('flex');
+                switchView('dashboard-view');
+            }, 800);
+        }
+    </script>
+</body>
+</html>
