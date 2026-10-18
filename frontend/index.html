@@ -226,9 +226,6 @@
                     <button onclick="navigate('paket-yukselt')" id="nav-paket-yukselt" class="sidebar-btn">
                         <span>✧</span> <span>Paket Yükselt</span>
                     </button>
-                    <button onclick="navigate('yonetim-paneli')" id="nav-yonetim-paneli" class="sidebar-btn hidden">
-                        <span>⚙</span> <span>Yönetim Paneli</span>
-                    </button>
                 </nav>
             </div>
 
@@ -480,54 +477,6 @@
                 <div id="paytr-info" class="hidden mt-4 bg-[#F6F3EE] border border-[#D5CDC2] text-[#2B3326] p-4 rounded-xl text-xs text-center font-medium">
                     Ödeme altyapısı (PayTR) yakında aktif olacaktır. Lütfen daha sonra tekrar deneyiniz.
                 </div>
-            </section>
-
-            <!-- YÖNETİM PANELİ -->
-            <section id="page-yonetim-paneli" class="page-section">
-                <div class="card-olive">
-                    <h2 class="text-[#F6F3EE] text-2xl font-bold m-0">Yönetim Paneli</h2>
-                    <p class="text-[#DFD8CE] text-xs mt-1.5 m-0">Tüm kullanıcı ve işlem verilerini buradan yönetiniz.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <div class="stat-card">
-                        <p class="text-[#7A756C] text-xs uppercase font-semibold mb-2">TOPLAM ÜYE</p>
-                        <p id="admin-total-users" class="text-[#3A4432] text-2xl font-bold m-0">0</p>
-                    </div>
-                    <div class="stat-card">
-                        <p class="text-[#7A756C] text-xs uppercase font-semibold mb-2">TOPLAM OKUTULAN BELGE</p>
-                        <p id="admin-total-docs" class="text-[#3A4432] text-2xl font-bold m-0">0</p>
-                    </div>
-                </div>
-
-                <div class="card-soft">
-                    <h3 class="text-[#2B3326] text-lg font-bold m-0">Kullanıcı Listesi</h3>
-                </div>
-                <div id="admin-users-list" class="mb-6"></div>
-
-                <div class="card-soft">
-                    <h3 class="text-[#2B3326] text-lg font-bold m-0 mb-3">Paket Değiştir</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label class="block text-xs font-semibold mb-1">Kullanıcı Seçin</label>
-                            <select id="admin-user-select" class="moya-input"></select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold mb-1">Yeni Paket</label>
-                            <select id="admin-pkg-select" class="moya-input">
-                                <option value="Ücretsiz">Ücretsiz (5 Kota)</option>
-                                <option value="Aylık Premium">Aylık Premium (1500 Kota)</option>
-                                <option value="Yıllık Premium">Yıllık Premium (1500 Kota)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button onclick="adminUpdatePackage()" class="btn-primary">Paketi Güncelle</button>
-                </div>
-
-                <div class="card-soft mt-6">
-                    <h3 class="text-[#2B3326] text-lg font-bold m-0">Son İşlemler (Tüm Kullanıcılar)</h3>
-                </div>
-                <div id="admin-txns-list"></div>
             </section>
 
         </main>
@@ -1000,62 +949,6 @@ const ADMIN_EMAIL = "denizzdinc@icloud.com";
             }
         }
 
-        function renderAdminData(users, allTxns) {
-            document.getElementById('admin-total-users').textContent = users.length;
-            const totalDocs = users.reduce((sum, u) => sum + (u.kullanilan_belge || 0), 0);
-            document.getElementById('admin-total-docs').textContent = totalDocs;
-
-            document.getElementById('admin-users-list').innerHTML = users.map(u => `
-                <div class="bg-[#F6F3EE] border border-[#DFD8CE] rounded-[14px] p-3.5 px-5 mb-2 text-xs">
-                    <span class="text-[#2B3326] font-semibold">${u.ad} / ${u.email}</span>
-                    <span class="text-[#B5ADA2]"> — </span>
-                    <span class="text-[#3A4432] font-bold">${u.paket}</span>
-                    <span class="text-[#B5ADA2]"> — </span>
-                    <span class="text-[#6E6A63]">Kullanım: ${u.kullanilan_belge}/${u.kota}</span>
-                    <span class="text-[#B5ADA2]"> — </span>
-                    <span class="text-[#6E6A63]">Referans: ${u.referans_kodu || '-'}</span>
-                    <span class="text-[#B5ADA2]"> — </span>
-                    <span class="text-[#6E6A63]">Kayıt: ${u.created_at || '-'}</span>
-                </div>
-            `).join('');
-
-            const selectEl = document.getElementById('admin-user-select');
-            selectEl.innerHTML = users.map(u => `<option value="${u.id}">${u.ad} (${u.email})</option>`).join('');
-
-            const txnsContainer = document.getElementById('admin-txns-list');
-            if (allTxns.length === 0) {
-                txnsContainer.innerHTML = `<p class="text-[#6E6A63] text-center py-4 text-xs">Henüz işlem bulunmuyor.</p>`;
-            } else {
-                txnsContainer.innerHTML = allTxns.slice(0, 50).map(t => {
-                    const color = t.islem_tipi === 'Gelir' ? '#3A5A40' : '#9E3B33';
-                    const sign = t.islem_tipi === 'Gelir' ? '+' : '-';
-                    return `
-                    <div class="bg-[#F6F3EE] border border-[#DFD8CE] rounded-[14px] p-3 px-5 mb-2 flex justify-between items-center text-xs">
-                        <div>
-                            <span class="text-[#3A4432] font-bold">${t.user_ad || '?'} / ${t.user_email || '?'}</span>
-                            <span class="text-[#8C857B] ml-2.5">${t.tarih}</span>
-                            <span class="text-[#2B3326] font-medium ml-2.5">${t.firma}</span>
-                            <span class="text-[#6E6A63] ml-2.5">${t.kategori}</span>
-                        </div>
-                        <span style="color:${color}" class="font-bold text-sm">${sign} ${formatTL(t.tutar)}</span>
-                    </div>`;
-                }).join('');
-            }
-        }
-
-        function adminUpdatePackage() {
-            const uid = parseInt(document.getElementById('admin-user-select').value);
-            const newPkg = document.getElementById('admin-pkg-select').value;
-            let users = getLocalUsers();
-            const idx = users.findIndex(u => u.id === uid);
-            if (idx > -1) {
-                users[idx].paket = newPkg;
-                users[idx].kota = newPkg === 'Ücretsiz' ? 5 : 1500;
-                saveLocalUsers(users);
-                alert(`${users[idx].ad} kullanıcısının paketi '${newPkg}' olarak güncellendi.`);
-                refreshUI();
-            }
-        }
     </script>
 </body>
 </html>
