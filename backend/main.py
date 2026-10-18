@@ -10,6 +10,8 @@ import os
 from PIL import Image
 from pydantic import BaseModel
 import json
+import sys, os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "finanser_secret_key_2026")
 ALGORITHM = "HS256"
